@@ -13,7 +13,7 @@ export default function Header() {
     setChecked(event.target.checked);
   };
   return (
-    <div className="header">
+    <header className="header">
       <div className="header__container">
         <div className="header__logo">
           <Link href="./" />{' '}
@@ -33,6 +33,6 @@ export default function Header() {
           Sign in
         </Button>
       </div>
-    </div>
+    </header>
   );
 }
