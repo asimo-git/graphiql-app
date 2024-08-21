@@ -1,6 +1,7 @@
 import { Link } from '@mui/material';
 import styles from './footer.module.css';
 import Image from 'next/image';
+import { GITHUB_LINKS, RS_REACT_LINK } from '../../utils/constants';
 
 export default function Footer() {
   return (
@@ -9,32 +10,30 @@ export default function Footer() {
         Our team:
         <div>
           <Link
-            href="https://github.com/mgovoru"
+            href={GITHUB_LINKS.MARIA}
             underline="hover"
             className={styles.blockLink}
           >
             Maria G.
           </Link>
           <Link
-            href="https://github.com/asimo-git"
+            href={GITHUB_LINKS.RINA}
             underline="hover"
             className={styles.blockLink}
           >
-            {' '}
             Rina K.
           </Link>
           <Link
-            href="https://github.com/drbliman"
+            href={GITHUB_LINKS.VLADIMIR}
             underline="hover"
             className={styles.blockLink}
           >
-            {' '}
             Vladimir B.
           </Link>
         </div>
       </div>
       <div>2024</div>
-      <Link href="https://rs.school/courses/reactjs">
+      <Link href={RS_REACT_LINK}>
         <Image src="/rs.svg" alt="RS school logo" width={24} height={24} />
       </Link>
     </footer>
