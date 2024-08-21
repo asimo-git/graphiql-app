@@ -15,9 +15,12 @@ module.exports = {
         tsconfig: {
           jsx: 'react-jsx',
         },
+        isolatedModules: true,
+        diagnostics: false,
       },
     ],
   },
+  setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
