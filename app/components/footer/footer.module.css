@@ -1,0 +1,14 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.linkContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.blockLink {
+  display: block;
+}
