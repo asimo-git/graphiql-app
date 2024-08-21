@@ -5,6 +5,7 @@ import Switch from '@mui/material/Switch';
 import Image from 'next/image';
 import './Header.scss';
 import { Button } from '@mui/material';
+import Link from 'next/link';
 export default function Header() {
   const [checked, setChecked] = React.useState(true);
 
@@ -14,14 +15,10 @@ export default function Header() {
   return (
     <div className="header">
       <div className="header__container">
-        <div>
-          {' '}
-          <Image
-            width={150}
-            height={50}
-            alt="logo"
-            src={'./rs_school_js.svg'}
-          />
+        <div className="header__logo">
+          <Link href="./" />{' '}
+          <Image width={50} height={50} alt="logo" src={'/logo.jpg'} />
+          <span>Welcome</span>
         </div>
         <div className="header__switch">
           {' '}
