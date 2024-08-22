@@ -1,4 +1,20 @@
 {
-  "Welcome": "Добрый день",
-  "Sign in": "Войти"
+  "Soft": "Софт",
+  "Sign in": "Войти",
+  "Welcome!": "Добро пожаловать!",
+  "Sign Up": "Зарегистрироваться",
+  "Welcome Back": "С возвращением!",
+  "Headers": "Заголовки",
+  "Method": "Метод",
+  "Body": "Tело сообщения",
+  "Status": "Статус",
+  "Documentation": "Документация",
+  "Query": "Запрос",
+  "Variables": "Переменные",
+  "You haven't executed any requests. It's empty here. Try:": "Вы не выполнили ни одного запроса. Здесь пусто. Попробуйте:",
+  "History Requests": "История запросов",
+  "Endpoint URL": "Эндпоинт URL",
+  "Header Key": "Ключ заголовка",
+  "Header Value": "Значение заголовка",
+  "Response": "Oтвет"
 }

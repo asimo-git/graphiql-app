@@ -28,7 +28,7 @@ export default function Header() {
         <div className="header__logo">
           <Link href="./" />{' '}
           <Image width={50} height={50} alt="logo" src={'/logo.jpg'} />
-          <span>{t('Welcome')}</span>
+          <span>{t('Soft')}</span>
         </div>
         <div className="header__switch">
           {' '}
