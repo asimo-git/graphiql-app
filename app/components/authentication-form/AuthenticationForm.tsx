@@ -5,6 +5,7 @@ import { getPasswordStrengthPercentage } from '../../utils/helpers';
 import './AuthenticationForm.scss';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+// import { useRouter } from 'next/navigation';
 
 type FormValues = {
   email: string;
@@ -20,6 +21,7 @@ export default function AuthenticationForm(): ReactElement {
     mode: 'onChange',
   });
 
+  // const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
 
@@ -30,7 +32,8 @@ export default function AuthenticationForm(): ReactElement {
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
-    // navigate("/");
+    // при успешном сабмите перенаправление на рест-страницу
+    // router.push('/rest')
   };
 
   return (

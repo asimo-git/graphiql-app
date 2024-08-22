@@ -2,12 +2,14 @@
 
 .authentication-container {
   text-align: center;
+  margin: 100px auto;
 
   .field-container {
     position: relative;
     margin-bottom: 20px;
     height: 90px;
     width: 500px;
+    margin: 0px auto 20px;
   }
 
   .password-strength-container {
