@@ -49,9 +49,9 @@ export default function AuthenticationForm(): ReactElement {
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);
+      } else {
+        console.error('An error occurred during submission:', err);
       }
-      // что делать с остальными ошибками?
-      console.error('An error occurred during submission:', err);
     }
   };
 
