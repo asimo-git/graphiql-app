@@ -2,7 +2,7 @@ $first-color: #1976d2;
 $secondary-color: #ebebeb;
 $text-color: black;
 $base-font-size: 18px;
-$maxWidthContainer: 1440px;
+$maxWidthContainer: 1110px;
 
 body {
 	font-size: $base-font-size;
@@ -15,6 +15,14 @@ body {
 	max-width: $maxWidthContainer;
 	width: 100%;
 	margin: 0 auto;
+}
+
+.box {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 16px;
+	background-color: #fff;
 }
 
 // как вставить кнопку:
