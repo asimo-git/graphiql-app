@@ -15,20 +15,18 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCEY3OU2eH090d9qHk_pgPx_AmozY3mhq0',
-  authDomain: 'graphiql-app-ff29c.firebaseapp.com',
-  projectId: 'graphiql-app-ff29c',
-  storageBucket: 'graphiql-app-ff29c.appspot.com',
-  messagingSenderId: '270529994675',
-  appId: '1:270529994675:web:fb8c718ce7e2eca1f075c6',
-  measurementId: 'G-N9NSCJ1X6C',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// все ошибки отлавливаются при сабмите формы
 
 const handleAuthentication = async (email: string, password: string) => {
   const querySet = query(collection(db, 'users'), where('email', '==', email));
