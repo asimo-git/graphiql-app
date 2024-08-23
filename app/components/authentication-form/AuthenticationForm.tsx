@@ -8,6 +8,7 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  LinearProgress,
   TextField,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -33,6 +34,7 @@ export default function AuthenticationForm(): ReactElement {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
@@ -41,6 +43,7 @@ export default function AuthenticationForm(): ReactElement {
 
   const onSubmit = async (data: FormValues) => {
     try {
+      setIsLoading(true);
       await handleAuthentication(data.email, data.password);
       setError(null);
       console.log('success');
@@ -52,6 +55,8 @@ export default function AuthenticationForm(): ReactElement {
       } else {
         console.error('An error occurred during submission:', err);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,30 +122,33 @@ export default function AuthenticationForm(): ReactElement {
               onChange: handlePasswordChange,
             })}
           />
-
-          <div className="password-strength-container">
-            <div
-              className="password-strength-bar"
-              style={{
-                width: `${passwordStrength}%`,
-                backgroundColor:
-                  passwordStrength < 26
-                    ? 'red'
-                    : passwordStrength < 51
-                      ? 'orange'
-                      : passwordStrength < 76
-                        ? 'yellow'
-                        : 'green',
-              }}
-            />
-          </div>
+          {isLoading ? (
+            <LinearProgress className="password-strength-container" />
+          ) : (
+            <div className="password-strength-container">
+              <div
+                className="password-strength-bar"
+                style={{
+                  width: `${passwordStrength}%`,
+                  backgroundColor:
+                    passwordStrength < 26
+                      ? 'red'
+                      : passwordStrength < 51
+                        ? 'orange'
+                        : passwordStrength < 76
+                          ? 'yellow'
+                          : 'green',
+                }}
+              />
+            </div>
+          )}
         </div>
 
         <Button
           variant="contained"
           type="submit"
           className="submit-button"
-          disabled={!isValid}
+          disabled={!isValid || isLoading}
         >
           Submit
         </Button>
