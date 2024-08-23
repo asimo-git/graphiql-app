@@ -1,8 +1,11 @@
 $first-color: #1976d2;
 $secondary-color: #ebebeb;
+$back-color: #fff;
 $text-color: black;
 $base-font-size: 18px;
 $maxWidthContainer: 1110px;
+$border-color: #ccc;
+$shadow-color: rgba(0, 0, 0, 0.1);
 
 body {
 	font-size: $base-font-size;
@@ -18,11 +21,11 @@ body {
 }
 
 .box {
-	border: 1px solid #ccc;
+	border: 1px solid $border-color;
 	border-radius: 8px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 8px $shadow-color;
 	padding: 16px;
-	background-color: #fff;
+	background-color: $back-color;
 }
 
 // как вставить кнопку:
