@@ -1,0 +1,31 @@
+$first-color: #1976d2;
+$secondary-color: #ebebeb;
+$text-color: black;
+$base-font-size: 18px;
+$maxWidthContainer: 1440px;
+
+body {
+	font-size: $base-font-size;
+	color: $text-color;
+	background-color: $secondary-color;
+	margin: 0;
+}
+
+[class*="__container"] {
+	max-width: $maxWidthContainer;
+	width: 100%;
+	margin: 0 auto;
+}
+
+// как вставить кнопку:
+// import * as React from 'react';
+// import Button from '@mui/material/Button';
+// <Button variant="contained">Text</Button>
+
+// как использовать перевод:
+// import { useTranslation } from 'react-i18next';
+// import i18n from './../../utils/local';
+// внутри компонента  
+// const { t } =useTranslation();
+// внутри элемента
+// <span> { t('Text') } </span>
