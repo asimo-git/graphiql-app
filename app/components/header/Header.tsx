@@ -78,7 +78,13 @@ export default function Header() {
         >
           {t(buttonText)}
         </Button>
-        <Button variant="contained" href="" className="header__button button">
+        <Button
+          variant="contained"
+          href=""
+          className={
+            user ? 'header__button button unvisible' : ' header__button button'
+          }
+        >
           {t('Sign Up')}
         </Button>
       </div>
