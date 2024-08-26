@@ -8,19 +8,44 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
+import { useCallback, useEffect, useState } from 'react';
+import { auth } from '@/app/services/firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 export default function Header() {
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    {
-      if (!checked) {
-        i18n.changeLanguage('ru');
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
       } else {
-        i18n.changeLanguage('en');
+        setUser(null);
       }
-    }
-    setChecked(event.target.checked);
+    });
+  });
+  const [buttonText, setButtonText] = useState('Sign in');
+  useEffect(() => {
+    const translationKey = user ? 'Sign out' : 'Sign in';
+    setButtonText(t(translationKey));
+  }, [user]);
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newLanguage = event.target.checked ? 'ru' : 'en';
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('language', event.target.checked ? 'en' : 'ru');
+      }
+      i18n.changeLanguage(newLanguage);
+      setChecked(event.target.checked);
+    },
+    []
+  );
+  const handleClick = () => {
+    const translationKey = user ? 'Sign out' : 'Sign in';
+    setButtonText(t(translationKey));
   };
   return (
     <header className="header">
@@ -41,10 +66,14 @@ export default function Header() {
         </div>
         <Button
           variant="contained"
-          href="https://rs.school/"
+          href="/authentication"
           className="header__button button"
+          onClick={handleClick}
         >
-          {t('Sign in')}
+          {t(buttonText)}
+        </Button>
+        <Button variant="contained" href="" className="header__button button">
+          {t('Sign Up')}
         </Button>
       </div>
     </header>
