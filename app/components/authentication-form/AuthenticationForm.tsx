@@ -12,16 +12,25 @@ import {
   TextField,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { handleAuthentication } from '../../services/firebase';
+import { auth, registerWithEmailAndPassword } from '../../services/firebase';
 import { FirebaseError } from 'firebase/app';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import PasswordStrengthBar from '../password-strength-bar/PasswordStrengthBar';
 
 type FormValues = {
+  name?: string;
   email: string;
   password: string;
 };
 
-export default function AuthenticationForm(): ReactElement {
+type AuthenticationFormProps = {
+  formType: 'auth' | 'reg';
+};
+
+export default function AuthenticationForm({
+  formType,
+}: AuthenticationFormProps): ReactElement {
   const {
     register,
     handleSubmit,
@@ -30,7 +39,7 @@ export default function AuthenticationForm(): ReactElement {
     mode: 'onChange',
   });
 
-  // const router = useRouter();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
@@ -44,15 +53,22 @@ export default function AuthenticationForm(): ReactElement {
   const onSubmit = async (data: FormValues) => {
     try {
       setIsLoading(true);
-      await handleAuthentication(data.email, data.password);
+      if (formType === 'reg') {
+        await registerWithEmailAndPassword(
+          data.name || 'user',
+          data.email,
+          data.password
+        );
+      } else {
+        await signInWithEmailAndPassword(auth, data.email, data.password);
+      }
       setError(null);
-      console.log('success');
-      // при успешном сабмите перенаправление на рест-страницу
-      // router.push('/rest')
+      router.push('/');
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);
       } else {
+        // TODO add error handler
         console.error('An error occurred during submission:', err);
       }
     } finally {
@@ -66,6 +82,22 @@ export default function AuthenticationForm(): ReactElement {
         className="authentication-container"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {formType === 'reg' && (
+          <div className="field-container">
+            <TextField
+              id="name"
+              label="Name"
+              variant="outlined"
+              fullWidth
+              error={!!errors.name}
+              helperText={errors.name ? errors.name.message : ''}
+              {...register('name', {
+                required: 'Name is required',
+              })}
+            />
+          </div>
+        )}
+
         <div className="field-container">
           <TextField
             id="email"
@@ -125,22 +157,9 @@ export default function AuthenticationForm(): ReactElement {
           {isLoading ? (
             <LinearProgress className="password-strength-container" />
           ) : (
-            <div className="password-strength-container">
-              <div
-                className="password-strength-bar"
-                style={{
-                  width: `${passwordStrength}%`,
-                  backgroundColor:
-                    passwordStrength < 26
-                      ? 'red'
-                      : passwordStrength < 51
-                        ? 'orange'
-                        : passwordStrength < 76
-                          ? 'yellow'
-                          : 'green',
-                }}
-              />
-            </div>
+            formType === 'reg' && (
+              <PasswordStrengthBar passwordStrength={passwordStrength} />
+            )
           )}
         </div>
 
@@ -153,6 +172,7 @@ export default function AuthenticationForm(): ReactElement {
           Submit
         </Button>
       </form>
+
       {error && (
         <Alert
           severity="error"

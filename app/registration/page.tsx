@@ -8,8 +8,8 @@ export default function AuthenticationPage() {
     <>
       <Header />
       <main>
-        <h2>Sign In</h2>
-        <AuthenticationForm formType="auth" />
+        <h2>Sign Up</h2>
+        <AuthenticationForm formType="reg" />
       </main>
       <Footer />
     </>
