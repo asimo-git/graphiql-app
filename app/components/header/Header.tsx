@@ -51,8 +51,6 @@ export default function Header() {
     } else {
       router.push('/authentication');
     }
-    // const translationKey = user ? 'Sign out' : 'Sign in';
-    // setButtonText(t(translationKey));
   };
   return (
     <header className="header">
