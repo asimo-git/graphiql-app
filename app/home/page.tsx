@@ -1,11 +1,10 @@
 'use client';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
-import AuthenticationForm from '../components/authentication-form/AuthenticationForm';
+import MainHome from '../components/main/MainHome';
 import { useRouter } from 'next/navigation';
-import './authentication.scss';
 
-export default function AuthenticationPage() {
+export default function Welcome() {
   const router = useRouter();
   if (typeof window !== 'undefined') {
     if (localStorage.getItem('isLogined') === 'true') {
@@ -15,10 +14,7 @@ export default function AuthenticationPage() {
   return (
     <>
       <Header />
-      <main className="main">
-        <h2>Sign In / Sign Up</h2>
-        <AuthenticationForm />
-      </main>
+      <MainHome />
       <Footer />
     </>
   );

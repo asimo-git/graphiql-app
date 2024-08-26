@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  Auth,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -33,10 +34,14 @@ const handleAuthentication = async (email: string, password: string) => {
   const querySnapshot = await getDocs(querySet);
   if (!querySnapshot.empty) {
     await signInWithEmailAndPassword(auth, email, password);
-    console.log('a', auth.currentUser);
+    createNameInLocalStorage(
+      String(auth.currentUser?.email?.split('@')[0] || '')
+    );
   } else {
     await registerWithEmailAndPassword(email, password);
-    console.log('r', auth.currentUser);
+    createNameInLocalStorage(
+      String(auth.currentUser?.email?.split('@')[0] || '')
+    );
   }
 };
 
@@ -55,7 +60,11 @@ const registerWithEmailAndPassword = async (
   });
 };
 
-const logout = () => {
+const logout = (auth: Auth) => {
   signOut(auth);
 };
+
+function createNameInLocalStorage(name: string) {
+  localStorage.setItem('name', name);
+}
 export { auth, db, registerWithEmailAndPassword, logout, handleAuthentication };

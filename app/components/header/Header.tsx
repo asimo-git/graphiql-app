@@ -8,10 +8,13 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
+import { auth, logout } from '@/app/services/firebase';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const [checked, setChecked] = React.useState(true);
   const { t } = useTranslation();
+  const router = useRouter();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     {
       if (!checked) {
@@ -21,6 +24,14 @@ export default function Header() {
       }
     }
     setChecked(event.target.checked);
+  };
+  const handleClick = () => {
+    logout(auth);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('isLogined', 'false');
+      localStorage.setItem('name', '');
+    }
+    router.push('/');
   };
   return (
     <header className="header">
@@ -45,6 +56,13 @@ export default function Header() {
           className="header__button button"
         >
           {t('Sign in')}
+        </Button>
+        <Button
+          variant="contained"
+          className="header__button button"
+          onClick={handleClick}
+        >
+          {t('Log Out')}
         </Button>
       </div>
     </header>

@@ -14,7 +14,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { handleAuthentication } from '../../services/firebase';
 import { FirebaseError } from 'firebase/app';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 type FormValues = {
   email: string;
@@ -30,7 +30,7 @@ export default function AuthenticationForm(): ReactElement {
     mode: 'onChange',
   });
 
-  // const router = useRouter();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
@@ -46,9 +46,10 @@ export default function AuthenticationForm(): ReactElement {
       setIsLoading(true);
       await handleAuthentication(data.email, data.password);
       setError(null);
-      console.log('success');
-      // при успешном сабмите перенаправление на рест-страницу
-      // router.push('/rest')
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('isLogined', 'true');
+      }
+      router.push('/home');
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);
