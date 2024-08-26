@@ -9,13 +9,15 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
 import { useCallback, useEffect, useState } from 'react';
-import { auth } from '@/app/services/firebase';
+import { auth, logout } from '@/app/services/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -44,8 +46,13 @@ export default function Header() {
     []
   );
   const handleClick = () => {
-    const translationKey = user ? 'Sign out' : 'Sign in';
-    setButtonText(t(translationKey));
+    if (user) {
+      logout();
+    } else {
+      router.push('/authentication');
+    }
+    // const translationKey = user ? 'Sign out' : 'Sign in';
+    // setButtonText(t(translationKey));
   };
   return (
     <header className="header">
@@ -66,7 +73,6 @@ export default function Header() {
         </div>
         <Button
           variant="contained"
-          href="/authentication"
           className="header__button button"
           onClick={handleClick}
         >
