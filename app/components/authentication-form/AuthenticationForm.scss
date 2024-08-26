@@ -1,0 +1,33 @@
+// TODO привести в соответствие с основными стилями
+
+.authentication-container {
+  text-align: center;
+  margin: 100px auto;
+
+  .field-container {
+    position: relative;
+    margin-bottom: 20px;
+    height: 90px;
+    width: 500px;
+    margin: 0px auto 20px;
+  }
+
+  .password-strength-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 500px;
+
+    .password-strength-bar {
+      height: 100%;
+      transition:
+        width 0.3s ease,
+        background-color 1s ease;
+    }
+  }
+}
