@@ -9,25 +9,16 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
 import { useCallback, useEffect, useState } from 'react';
-import { auth, logout } from '@/app/services/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { logout } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
+import { IsAuthenticated } from '@/app/utils/Auth';
 
 export default function Header() {
   const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
-  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+  const user = IsAuthenticated();
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-  });
   const [buttonText, setButtonText] = useState('Sign in');
   useEffect(() => {
     const translationKey = user ? 'Sign out' : 'Sign in';
