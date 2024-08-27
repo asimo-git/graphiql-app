@@ -11,13 +11,13 @@ import i18n from './../../utils/local';
 import { useCallback, useEffect, useState } from 'react';
 import { logout } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
-import { IsAuthenticated } from '@/app/utils/Auth';
+import { useAuthenticated } from '@/app/utils/Auth';
 
 export default function Header() {
   const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
   const router = useRouter();
-  const user = IsAuthenticated();
+  const user = useAuthenticated();
 
   const [buttonText, setButtonText] = useState('Sign in');
   useEffect(() => {

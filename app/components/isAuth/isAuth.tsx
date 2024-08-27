@@ -1,5 +1,5 @@
 'use client';
-import { IsAuthenticated } from '../../utils/Auth';
+import { useAuthenticated } from '../../utils/Auth';
 import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
 interface WithAuthProps {
@@ -10,7 +10,7 @@ export default function withAuth<P extends WithAuthProps>(
   Component: React.ComponentType<P>
 ) {
   return function AuthenticatedComponent(props: P) {
-    const auth = IsAuthenticated;
+    const auth = useAuthenticated();
 
     useEffect(() => {
       if (!auth) {
