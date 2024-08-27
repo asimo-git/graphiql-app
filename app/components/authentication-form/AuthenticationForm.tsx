@@ -67,10 +67,10 @@ export default function AuthenticationForm({
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);
-      } else {
-        // TODO add error handler
-        console.error('An error occurred during submission:', err);
       }
+      // else {
+      //   TODO add error handler
+      // }
     } finally {
       setIsLoading(false);
     }
