@@ -8,30 +8,42 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
-import { auth, logout } from '@/app/services/firebase';
+
+import { useCallback, useEffect, useState } from 'react';
+import { logout, auth } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
+import { useAuthenticated } from '@/app/utils/Auth';
 
 export default function Header() {
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
   const router = useRouter();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    {
-      if (!checked) {
-        i18n.changeLanguage('ru');
-      } else {
-        i18n.changeLanguage('en');
+
+  const user = useAuthenticated();
+
+  const [buttonText, setButtonText] = useState('Sign in');
+  useEffect(() => {
+    const translationKey = user ? 'Sign out' : 'Sign in';
+    setButtonText(t(translationKey));
+  }, [user]);
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newLanguage = event.target.checked ? 'ru' : 'en';
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('language', event.target.checked ? 'en' : 'ru');
       }
-    }
-    setChecked(event.target.checked);
-  };
+      i18n.changeLanguage(newLanguage);
+      setChecked(event.target.checked);
+    },
+    []
+  );
   const handleClick = () => {
-    logout(auth);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('isLogined', 'false');
-      localStorage.setItem('name', '');
+    if (user) {
+      logout(auth);
+    } else {
+      router.push('/authentication');
     }
-    router.push('/');
   };
   return (
     <header className="header">
@@ -52,17 +64,19 @@ export default function Header() {
         </div>
         <Button
           variant="contained"
-          href="https://rs.school/"
-          className="header__button button"
-        >
-          {t('Sign in')}
-        </Button>
-        <Button
-          variant="contained"
           className="header__button button"
           onClick={handleClick}
         >
-          {t('Log Out')}
+          {t(buttonText)}
+        </Button>
+        <Button
+          variant="contained"
+          href=""
+          className={
+            user ? 'header__button button unvisible' : ' header__button button'
+          }
+        >
+          {t('Sign Up')}
         </Button>
       </div>
     </header>

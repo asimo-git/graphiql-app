@@ -1,9 +1,9 @@
 {
   "Софт": "Soft",
   "Войти": "Sign in",
-  "Вывйти": "Log Out",
+  "Выйти": "Sign out",
   "Добро пожаловать!": "Welcome!",
-  "Зарегистрироваться": "Sign Up",
+  "Регистрация": "Sign Up",
   "С возвращением!": "Welcome Back",
   "Заголовки": "Headers",
   "Метод": "Method",
@@ -17,5 +17,5 @@
   "Эндпоинт URL": "Endpoint URL",
   "Ключ заголовка": "Header Key",
   "Значение заголовка": "Header Value",
-  "Oтвет": "Response" 
+  "Oтвет": "Response"
 }

@@ -3,6 +3,7 @@
 	position: sticky;
 	top: 0;
 	background-color: white;
+	z-index: 1000;
 }
 
 .header__container {
@@ -28,5 +29,9 @@
 }
 
 .header__button {
-	width: 100px;
+	max-width: 150px;
+}
+
+.unvisible {
+	display: none;
 }

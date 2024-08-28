@@ -27,16 +27,3 @@ body {
 	padding: 16px;
 	background-color: $back-color;
 }
-
-// как вставить кнопку:
-// import * as React from 'react';
-// import Button from '@mui/material/Button';
-// <Button variant="contained">Text</Button>
-
-// как использовать перевод:
-// import { useTranslation } from 'react-i18next';
-// import i18n from './../../utils/local';
-// внутри компонента  
-// const { t } =useTranslation();
-// внутри элемента
-// <span> { t('Text') } </span>
