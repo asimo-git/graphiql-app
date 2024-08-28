@@ -46,10 +46,7 @@ export default function AuthenticationForm(): ReactElement {
       setIsLoading(true);
       await handleAuthentication(data.email, data.password);
       setError(null);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('isLogined', 'true');
-      }
-      router.push('/home');
+      router.push('/');
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);

@@ -1,20 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Link } from '@mui/material';
 import styles from './Main.module.scss';
 
-export default function MainHome() {
-  const [name, setName] = useState<string | null>(null);
+interface MainHomeProps {
+  user: string | null;
+}
 
-  useEffect(() => {
-    const storedName = localStorage.getItem('name');
-    setName(storedName);
-  }, []);
+export default function MainHome({ user }: MainHomeProps) {
+  const name = user?.split('@')[0];
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.welcome}>{`Welcome${name ? `, ${name}` : ''}!`}</h1>
+      <h1 className={styles.welcome}>{`Welcome, ${name}!`}</h1>
       <div className={styles.links}>
         <Link href={'/rest'} underline="hover" marginRight={'2rem'}>
           REST Client

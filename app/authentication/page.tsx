@@ -3,15 +3,17 @@ import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import AuthenticationForm from '../components/authentication-form/AuthenticationForm';
 import { useRouter } from 'next/navigation';
+import { useAuthenticated } from '../utils/Auth';
 import './authentication.scss';
 
-export default function AuthenticationPage() {
+export default function AuthenticationGuard() {
   const router = useRouter();
-  if (typeof window !== 'undefined') {
-    if (localStorage.getItem('isLogined') === 'true') {
-      router.push('/home');
-    }
+  const user = useAuthenticated();
+
+  if (user) {
+    router.push('/');
   }
+
   return (
     <>
       <Header />
