@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { handleAuthentication } from '../../services/firebase';
 import { FirebaseError } from 'firebase/app';
 import { useRouter } from 'next/navigation';
+import Routes from '@/app/utils/routes';
 
 type FormValues = {
   email: string;
@@ -46,7 +47,7 @@ export default function AuthenticationForm(): ReactElement {
       setIsLoading(true);
       await handleAuthentication(data.email, data.password);
       setError(null);
-      router.push('/');
+      router.push(Routes.Home);
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);

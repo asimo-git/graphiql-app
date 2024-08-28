@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { logout, auth } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '@/app/utils/Auth';
+import Routes from '@/app/utils/routes';
 
 export default function Header() {
   const [checked, setChecked] = useState<boolean>(true);
@@ -42,7 +43,7 @@ export default function Header() {
     if (user) {
       logout(auth);
     } else {
-      router.push('/authentication');
+      router.push(Routes.Authentication);
     }
   };
   return (

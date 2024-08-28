@@ -4,6 +4,7 @@ import Footer from '../components/footer/Footer';
 import AuthenticationForm from '../components/authentication-form/AuthenticationForm';
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '../utils/Auth';
+import Routes from '../utils/routes';
 import './authentication.scss';
 
 export default function AuthenticationGuard() {
@@ -11,7 +12,7 @@ export default function AuthenticationGuard() {
   const user = useAuthenticated();
 
   if (user) {
-    router.push('/');
+    router.push(Routes.Home);
   }
 
   return (
