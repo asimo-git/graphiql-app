@@ -21,5 +21,13 @@
   "Наша команда:": "Our team:",
   "Мария Г.": "Maria G.",
   "Рина К.": "Rina K.",
-  "Владимир Б.": "Vladimir B."
+  "Владимир Б.": "Vladimir B.",
+  "неизвестная ошибка, попробуйте позже": "unknown error, try again later",
+  "Этот е-мейл уже используется. Используйте другой или авторизуйтесь": "This email is already registered. Please use a different email or log in",
+  "Нет аккаунта с таким е-мейлом. Пожалуйста, вначале зарегистрируйтесь": "No account found with this email. Please register first",
+  "Неверный пароль. Пожалуйства, попробуйте еще раз": "Incorrect password. Please try again",
+  "Имя": "Name",
+  "Пароль": "Password",
+  "Е-мейл": "Email",
+  "Отправить": "Submit"
 }

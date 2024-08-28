@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import PasswordStrengthBar from '../password-strength-bar/PasswordStrengthBar';
 import Routes from '@/app/utils/routes';
+import { useTranslation } from 'react-i18next';
+import { ERROR_MESSAGES } from '@/app/utils/constants';
 
 type FormValues = {
   name?: string;
@@ -40,6 +42,7 @@ export default function AuthenticationForm({
     mode: 'onChange',
   });
 
+  const { t } = useTranslation();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
@@ -67,10 +70,13 @@ export default function AuthenticationForm({
       router.push(Routes.Home);
     } catch (err) {
       if (err instanceof FirebaseError) {
-        setError(err.message);
+        const message =
+          ERROR_MESSAGES[err.code as keyof typeof ERROR_MESSAGES] ||
+          ERROR_MESSAGES['default'];
+        setError(t(message));
       }
       // else {
-      //   TODO add error handler
+      //   setError(t('unknown error, try again later'));
       // }
     } finally {
       setIsLoading(false);
@@ -87,7 +93,7 @@ export default function AuthenticationForm({
           <div className="field-container">
             <TextField
               id="name"
-              label="Name"
+              label={t('Name')}
               variant="outlined"
               fullWidth
               error={!!errors.name}
@@ -102,7 +108,7 @@ export default function AuthenticationForm({
         <div className="field-container">
           <TextField
             id="email"
-            label="Email"
+            label={t('Email')}
             variant="outlined"
             fullWidth
             error={!!errors.email}
@@ -122,7 +128,7 @@ export default function AuthenticationForm({
         <div className="field-container">
           <TextField
             id="password"
-            label="Password"
+            label={t('Password')}
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
@@ -170,7 +176,7 @@ export default function AuthenticationForm({
           className="submit-button"
           disabled={!isValid || isLoading}
         >
-          Submit
+          {t('Submit')}
         </Button>
       </form>
 

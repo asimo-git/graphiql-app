@@ -5,10 +5,12 @@ import AuthenticationForm from '../components/authentication-form/Authentication
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '../utils/Auth';
 import Routes from '../utils/routes';
+import { useTranslation } from 'react-i18next';
 
 export default function AuthenticationPage() {
   const router = useRouter();
   const user = useAuthenticated();
+  const { t } = useTranslation();
 
   if (user) {
     router.push(Routes.Home);
@@ -18,7 +20,7 @@ export default function AuthenticationPage() {
     <>
       <Header />
       <main className="main">
-        <h2>Sign In</h2>
+        <h2>{t('Sign in')}</h2>
         <AuthenticationForm formType="auth" />
       </main>
       <Footer />
