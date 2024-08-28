@@ -8,15 +8,18 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
+
 import { useCallback, useEffect, useState } from 'react';
-import { logout } from '@/app/services/firebase';
+import { logout, auth } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '@/app/utils/Auth';
+import Routes from '@/app/utils/routes';
 
 export default function Header() {
   const [checked, setChecked] = useState<boolean>(true);
   const { t } = useTranslation();
   const router = useRouter();
+
   const user = useAuthenticated();
 
   const [buttonText, setButtonText] = useState('Sign in');
@@ -38,9 +41,9 @@ export default function Header() {
   );
   const handleClick = () => {
     if (user) {
-      logout();
+      logout(auth);
     } else {
-      router.push('/authentication');
+      router.push(Routes.Authentication);
     }
   };
   return (
