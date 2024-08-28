@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   Auth,
+  updateProfile,
 } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
@@ -34,6 +35,9 @@ const registerWithEmailAndPassword = async (
     authProvider: 'local',
     email,
   });
+  await updateProfile(user, {
+    displayName: name,
+  });
 };
 
 const logout = (auth: Auth) => {
@@ -41,4 +45,3 @@ const logout = (auth: Auth) => {
 };
 
 export { auth, db, registerWithEmailAndPassword, logout };
-

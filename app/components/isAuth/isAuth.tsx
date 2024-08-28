@@ -16,7 +16,7 @@ export default function withAuth<P extends WithAuthProps>(
       if (!auth) {
         return redirect('/');
       }
-    }, []);
+    }, [auth]);
 
     if (!auth) {
       return null;

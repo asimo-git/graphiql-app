@@ -5,9 +5,8 @@ import AuthenticationForm from '../components/authentication-form/Authentication
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '../utils/Auth';
 import Routes from '../utils/routes';
-import './authentication.scss';
 
-export default function AuthenticationGuard() {
+export default function AuthenticationPage() {
   const router = useRouter();
   const user = useAuthenticated();
 
