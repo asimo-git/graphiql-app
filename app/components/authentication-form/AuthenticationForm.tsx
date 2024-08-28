@@ -17,6 +17,7 @@ import { FirebaseError } from 'firebase/app';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import PasswordStrengthBar from '../password-strength-bar/PasswordStrengthBar';
+import Routes from '@/app/utils/routes';
 
 type FormValues = {
   name?: string;
@@ -63,7 +64,7 @@ export default function AuthenticationForm({
         await signInWithEmailAndPassword(auth, data.email, data.password);
       }
       setError(null);
-      router.push('/');
+      router.push(Routes.Home);
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(err.message);

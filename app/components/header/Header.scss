@@ -2,12 +2,13 @@
 	min-height: 70px;
 	position: sticky;
 	top: 0;
+	background-color: white;
 	z-index: 1000;
 }
 
 .header__container {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	gap: 48px;
 }

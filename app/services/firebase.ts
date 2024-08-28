@@ -3,6 +3,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signOut,
+  Auth,
 } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
@@ -35,8 +36,9 @@ const registerWithEmailAndPassword = async (
   });
 };
 
-const logout = () => {
+const logout = (auth: Auth) => {
   signOut(auth);
 };
 
 export { auth, db, registerWithEmailAndPassword, logout };
+
