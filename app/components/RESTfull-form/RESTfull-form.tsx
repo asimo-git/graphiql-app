@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
+import './RESTfull.scss';
 
 const RESTfullForm = () => {
   const [Method, setMethod] = React.useState('');
@@ -13,9 +15,9 @@ const RESTfullForm = () => {
     setMethod(event.target.value as string);
   };
   return (
-    <main className="main">
-      <div className="rest__container">
-        <h1 className="rest__title">REST Client</h1>
+    <div className="rest__container">
+      <h1 className="rest__title">REST Client</h1>
+      <div className="rest__item">
         <Box>
           <FormControl sx={{ width: '20%', marginRight: '10%' }}>
             <InputLabel id="demo-simple-select-label">Method</InputLabel>
@@ -41,7 +43,35 @@ const RESTfullForm = () => {
           />
         </Box>
       </div>
-    </main>
+      <div className="rest__item">
+        <span>Headers:</span>{' '}
+        <Button
+          variant="contained"
+          className="rest__button button"
+          onClick={() => {}}
+        >
+          Add Header Button
+        </Button>
+      </div>
+      <div className="rest__item fullwidth">
+        {' '}
+        <TextField
+          sx={{ width: '45%' }}
+          id="outlined-basic"
+          label="Header Key"
+          variant="outlined"
+        />{' '}
+        <TextField
+          sx={{ width: '45%' }}
+          id="outlined-basic"
+          label="Header Value"
+          variant="outlined"
+        />
+      </div>
+      <div className="rest__item">
+        <span>Body:</span>{' '}
+      </div>
+    </div>
   );
 };
 

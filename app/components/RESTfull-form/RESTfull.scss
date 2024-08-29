@@ -1,0 +1,10 @@
+.rest__container {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.fullwidth {
+	display: flex;
+	justify-content: space-between;
+}

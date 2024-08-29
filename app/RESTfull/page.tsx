@@ -8,7 +8,7 @@ export default function RESTfullPage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="main">
         <RESTfullForm />
       </main>
       <Footer />
