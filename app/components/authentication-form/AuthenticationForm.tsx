@@ -70,14 +70,17 @@ export default function AuthenticationForm({
       router.push(Routes.Home);
     } catch (err) {
       if (err instanceof FirebaseError) {
+        // TODO - fix a bug
+        // there is a problem with authorization(!) error messages.
+        // instead of specific errors, the code auth/invalid-credential always comes
+        // registration errors are correct
         const message =
           ERROR_MESSAGES[err.code as keyof typeof ERROR_MESSAGES] ||
           ERROR_MESSAGES['default'];
         setError(t(message));
+      } else {
+        throw err;
       }
-      // else {
-      //   setError(t('unknown error, try again later'));
-      // }
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +102,7 @@ export default function AuthenticationForm({
               error={!!errors.name}
               helperText={errors.name ? errors.name.message : ''}
               {...register('name', {
-                required: 'Name is required',
+                required: t('Name is required'),
               })}
             />
           </div>
@@ -114,10 +117,10 @@ export default function AuthenticationForm({
             error={!!errors.email}
             helperText={errors.email ? errors.email.message : ''}
             {...register('email', {
-              required: 'Email is required',
+              required: t('Email is required'),
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'Invalid email address',
+                message: t('Invalid email address'),
               },
             })}
           />
@@ -147,16 +150,17 @@ export default function AuthenticationForm({
               ),
             }}
             {...register('password', {
-              required: 'Password is required',
+              required: t('Password is required'),
               minLength: {
                 value: 8,
-                message: 'Password must be at least 8 characters long',
+                message: t('Password must be at least 8 characters long'),
               },
               pattern: {
                 value:
                   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\p{S}\p{P}\p{M}\p{Sk}\p{Sc}]).{8,}$/u,
-                message:
-                  'Password must contain at least one letter, one digit, and one special character',
+                message: t(
+                  'Password must contain at least one letter, one digit, and one special character'
+                ),
               },
               onChange: handlePasswordChange,
             })}

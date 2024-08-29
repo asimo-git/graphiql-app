@@ -29,5 +29,11 @@
   "Имя": "Name",
   "Пароль": "Password",
   "Е-мейл": "Email",
-  "Отправить": "Submit"
+  "Отправить": "Submit",
+  "Имя обязательно": "Name is required",
+  "Электронная почта обязательна": "Email is required",
+  "Недопустимый адрес электронной почты": "Invalid email address",
+  "Пароль обязателен": "Password is required",
+  "Пароль должен быть не менее 8 символов": "Password must be at least 8 characters long",
+  "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character"
 }

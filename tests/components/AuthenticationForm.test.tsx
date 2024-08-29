@@ -13,7 +13,18 @@ jest.mock('../../app/services/firebase', () => ({
 }));
 
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    // i18n: {
+    //   changeLanguage: jest.fn(),
+    // },
+  }),
 }));
 
 describe('AuthenticationForm', () => {
