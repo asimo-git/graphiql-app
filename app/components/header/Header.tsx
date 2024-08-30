@@ -39,10 +39,12 @@ export default function Header() {
     []
   );
   const handleClick = () => {
-    if (user) {
-      logout(auth);
-    } else {
-      router.push(Routes.Authentication);
+    if (user !== undefined) {
+      if (user) {
+        logout(auth);
+      } else {
+        router.push(Routes.Authentication);
+      }
     }
   };
   return (

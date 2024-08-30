@@ -6,24 +6,30 @@ import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '../utils/Auth';
 import Routes from '../utils/routes';
 import { useTranslation } from 'react-i18next';
+import styles from '../components/main/Main.module.scss';
 
 export default function AuthenticationPage() {
   const router = useRouter();
   const user = useAuthenticated();
   const { t } = useTranslation();
-
-  if (user) {
-    router.push(Routes.Home);
-  }
+  console.log(user);
 
   return (
     <>
-      <Header />
-      <main className="main">
-        <h2>{t('Sign in')}</h2>
-        <AuthenticationForm formType="auth" />
-      </main>
-      <Footer />
+      {user !== undefined ? (
+        !user ? (
+          <>
+            <Header />
+            <main className={styles.main}>
+              <h2>{t('Sign in')}</h2>
+              <AuthenticationForm formType="auth" />
+            </main>
+            <Footer />
+          </>
+        ) : (
+          router.push(Routes.Home)
+        )
+      ) : null}
     </>
   );
 }
