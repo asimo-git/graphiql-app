@@ -18,6 +18,11 @@
   "Header Key": "Ключ заголовка",
   "Header Value": "Значение заголовка",
   "Response": "Oтвет",
+  "Not Found": "Страница не найдена",
+  "Could not find requested resource": "Не удалось найти запрошенный ресурс",
+  "Return Home": "На главную",
+  "Something went wrong!": "Что-то пошло не так",
+  "Try again": "Попробовать снова"
   "Our team:": "Наша команда:",
   "Maria G.": "Мария Г.",
   "Rina K.": "Рина К.",

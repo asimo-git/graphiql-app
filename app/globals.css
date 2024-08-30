@@ -96,6 +96,11 @@ a {
   text-decoration: none;
 }
 
+
+main {
+  text-align: center;
+}
+
 h2 {
   text-align: center;
   margin: 50px auto;
