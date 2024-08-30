@@ -13,7 +13,7 @@ export default function Error({
   return (
     <main>
       <h2>{t('Something went wrong!')}</h2>
-      <Button variant="contained" onClick={() => reset()}>
+      <Button variant="contained" onClick={reset}>
         {t('Try again')}
       </Button>
     </main>
