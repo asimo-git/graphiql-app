@@ -12,6 +12,7 @@ import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { JsonEditor } from 'json-edit-react';
 import { useEffect, useState } from 'react';
+import { METHODS } from '@/app/utils/constants';
 
 const RESTfullForm = () => {
   const [Method, setMethod] = React.useState('');
@@ -44,13 +45,13 @@ const RESTfullForm = () => {
               label="Method"
               onChange={handleChange}
             >
-              <MenuItem value={10}>GET</MenuItem>
-              <MenuItem value={20}>POST</MenuItem>
-              <MenuItem value={30}>PUT</MenuItem>
-              <MenuItem value={40}>PATCH</MenuItem>
-              <MenuItem value={50}>DELETE</MenuItem>
-              <MenuItem value={50}>HEAD</MenuItem>
-              <MenuItem value={50}>OPTIONS</MenuItem>
+              <MenuItem value={METHODS.GET}>GET</MenuItem>
+              <MenuItem value={METHODS.POST}>POST</MenuItem>
+              <MenuItem value={METHODS.PUT}>PUT</MenuItem>
+              <MenuItem value={METHODS.PATCH}>PATCH</MenuItem>
+              <MenuItem value={METHODS.DELETE}>DELETE</MenuItem>
+              <MenuItem value={METHODS.HEAD}>HEAD</MenuItem>
+              <MenuItem value={METHODS.OPTIONS}>OPTIONS</MenuItem>
             </Select>
           </FormControl>
           <TextField

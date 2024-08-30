@@ -5,3 +5,13 @@ export const GITHUB_LINKS = {
 };
 
 export const RS_REACT_LINK = 'https://rs.school/courses/reactjs';
+
+export const METHODS = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+  HEAD: 'HEAD',
+  OPTIONS: 'OPTIONS',
+};
