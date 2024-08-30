@@ -2,9 +2,17 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	overflow-y: auto;
+	padding-top: 70px;
 }
 
 .fullwidth {
 	display: flex;
 	justify-content: space-between;
+}
+
+.item-title {
+	font-weight: 700;
+	font-size: 24px;
+	text-align: center;
 }
