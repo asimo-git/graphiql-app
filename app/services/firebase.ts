@@ -1,19 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   Auth,
+  updateProfile,
 } from 'firebase/auth';
-import {
-  getFirestore,
-  query,
-  getDocs,
-  collection,
-  where,
-  addDoc,
-} from 'firebase/firestore';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -29,28 +22,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const handleAuthentication = async (email: string, password: string) => {
-  const querySet = query(collection(db, 'users'), where('email', '==', email));
-  const querySnapshot = await getDocs(querySet);
-  if (!querySnapshot.empty) {
-    await signInWithEmailAndPassword(auth, email, password);
-    createNameInLocalStorage(
-      String(auth.currentUser?.email?.split('@')[0] || '')
-    );
-  } else {
-    await registerWithEmailAndPassword(email, password);
-    createNameInLocalStorage(
-      String(auth.currentUser?.email?.split('@')[0] || '')
-    );
-  }
-};
-
 const registerWithEmailAndPassword = async (
+  name: string,
   email: string,
   password: string
 ) => {
   const res = await createUserWithEmailAndPassword(auth, email, password);
-  const name = email.split('@')[0];
   const user = res.user;
   await addDoc(collection(db, 'users'), {
     uid: user.uid,
@@ -58,13 +35,13 @@ const registerWithEmailAndPassword = async (
     authProvider: 'local',
     email,
   });
+  await updateProfile(user, {
+    displayName: name,
+  });
 };
 
 const logout = (auth: Auth) => {
   signOut(auth);
 };
 
-function createNameInLocalStorage(name: string) {
-  localStorage.setItem('name', name);
-}
-export { auth, db, registerWithEmailAndPassword, logout, handleAuthentication };
+export { auth, db, registerWithEmailAndPassword, logout };
