@@ -23,4 +23,22 @@
   "На главную": "Return Home",
   "Что-то пошло не так": "Something went wrong!",
   "Попробовать снова": "Try again"
+  "Наша команда:": "Our team:",
+  "Мария Г.": "Maria G.",
+  "Рина К.": "Rina K.",
+  "Владимир Б.": "Vladimir B.",
+  "неизвестная ошибка, попробуйте позже": "unknown error, try again later",
+  "Этот е-мейл уже используется. Используйте другой или авторизуйтесь": "This email is already registered. Please use a different email or log in",
+  "Нет аккаунта с таким е-мейлом. Пожалуйста, вначале зарегистрируйтесь": "No account found with this email. Please register first",
+  "Неверный пароль. Пожалуйства, попробуйте еще раз": "Incorrect password. Please try again",
+  "Имя": "Name",
+  "Пароль": "Password",
+  "Е-мейл": "Email",
+  "Отправить": "Submit",
+  "Имя обязательно": "Name is required",
+  "Электронная почта обязательна": "Email is required",
+  "Недопустимый адрес электронной почты": "Invalid email address",
+  "Пароль обязателен": "Password is required",
+  "Пароль должен быть не менее 8 символов": "Password must be at least 8 characters long",
+  "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character"
 }

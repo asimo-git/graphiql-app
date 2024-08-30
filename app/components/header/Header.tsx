@@ -1,4 +1,3 @@
-// header
 'use client';
 import * as React from 'react';
 import Switch from '@mui/material/Switch';
@@ -26,7 +25,7 @@ export default function Header() {
   useEffect(() => {
     const translationKey = user ? 'Sign out' : 'Sign in';
     setButtonText(t(translationKey));
-  }, [user]);
+  }, [user, t]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +71,7 @@ export default function Header() {
         </Button>
         <Button
           variant="contained"
-          href=""
+          href={Routes.Registration}
           className={
             user ? 'header__button button unvisible' : ' header__button button'
           }

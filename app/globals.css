@@ -96,12 +96,14 @@ a {
   text-decoration: none;
 }
 
+
 main {
   text-align: center;
 }
 
 h2 {
-  margin: 20px;
+  text-align: center;
+  margin: 50px auto;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -3,13 +3,10 @@
 import { Link } from '@mui/material';
 import Routers from '../../utils/routes';
 import styles from './Main.module.scss';
+import { auth } from '@/app/services/firebase';
 
-interface MainHomeProps {
-  user: string | null;
-}
-
-export default function MainHome({ user }: MainHomeProps) {
-  const name = user?.split('@')[0];
+export default function MainHome() {
+  const name = auth.currentUser?.displayName;
 
   return (
     <main className={styles.main}>

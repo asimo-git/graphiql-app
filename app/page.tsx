@@ -10,7 +10,7 @@ export default function Welcome() {
   return (
     <>
       <Header />
-      {user ? <MainHome user={user.email} /> : <MainWelcome />}
+      {user ? <MainHome /> : <MainWelcome />}
       <Footer />
     </>
   );
