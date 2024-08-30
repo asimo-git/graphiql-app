@@ -17,5 +17,10 @@
   "Эндпоинт URL": "Endpoint URL",
   "Ключ заголовка": "Header Key",
   "Значение заголовка": "Header Value",
-  "Oтвет": "Response"
+  "Oтвет": "Response",
+  "Страница не найдена": "Not Found",
+  "Не удалось найти запрошенный ресурс": "Could not find requested resource",
+  "На главную": "Return Home",
+  "Что-то пошло не так": "Something went wrong!",
+  "Попробовать снова": "Try again"
 }
