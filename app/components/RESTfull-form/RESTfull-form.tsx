@@ -1,67 +1,92 @@
 'use client';
-import React, { ReactElement } from 'react';
+import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import './RESTfull.scss';
 import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { JsonEditor } from 'json-edit-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import Editor from './TextEditor';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+
+type FormData = {
+  method: string;
+  endpoint: string;
+  headers?: {
+    key: string;
+    value: string;
+  }[];
+  jsonBody?: string;
+  textBody?: string;
+};
 
 const RESTfullForm = () => {
-  const [Method, setMethod] = React.useState('');
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setMethod(event.target.value as string);
-  };
-
-  const [jsonData, setJsonData] = useState({});
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'headers',
+  });
 
   const [chooseField, setchooseField] = useState(true);
 
-  useEffect(() => setJsonData(jsonData), [jsonData]);
-
-  const [elementContent, setElementContent] = useState<ReactElement | null>(
-    null
+  const jsonEditorElement = useMemo(
+    () => (
+      <Controller
+        control={control}
+        name="jsonBody"
+        render={({ field: { onChange, value } }) => (
+          <JsonEditor
+            data={value || {}}
+            setData={(newValue) => onChange(newValue)}
+          />
+        )}
+      />
+    ),
+    [control]
   );
 
-  const [txtContent, settxtContent] = useState<ReactElement | null>(null);
+  const txtEditorElement = useMemo(
+    () => (
+      <Controller
+        control={control}
+        name="textBody"
+        render={({ field }) => <Editor setTextContent={field.onChange} />}
+      />
+    ),
+    [control]
+  );
 
-  useEffect(() => {
-    const element = <JsonEditor data={jsonData} setData={setJsonData} />;
-    if (element) {
-      setElementContent(element);
-    }
-  }, [jsonData, setJsonData]);
-
-  useEffect(() => {
-    const element = <Editor />;
-    if (element) {
-      settxtContent(element);
-    }
-  }, [chooseField]);
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+  };
 
   return (
     <div className="rest__container">
       <h1 className="rest__title">REST Client</h1>
-      <form className="rest__form">
+      <form className="rest__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="rest__item">
           <Box className="rest__box">
             <FormControl sx={{ width: '20%', marginRight: '10%' }}>
               <InputLabel id="demo-simple-select-label">Method</InputLabel>
               <Select
+                {...register('method')}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={Method}
+                defaultValue={METHODS.GET}
                 label="Method"
-                onChange={handleChange}
               >
                 <MenuItem value={METHODS.GET}>GET</MenuItem>
                 <MenuItem value={METHODS.POST}>POST</MenuItem>
@@ -73,11 +98,15 @@ const RESTfullForm = () => {
               </Select>
             </FormControl>
             <TextField
+              {...register('endpoint', { required: true })}
               sx={{ width: '50%', marginRight: '10%' }}
               id="outlined-basic"
               label="Endpoint URL"
               variant="outlined"
+              error={!!errors.endpoint}
+              helperText={errors.endpoint ? 'Endpoint is required' : ''}
             />
+
             <Button
               variant="contained"
               className="rest__button button"
@@ -88,30 +117,46 @@ const RESTfullForm = () => {
             </Button>
           </Box>
         </div>
+
         <div className="rest__item">
           <span>Headers:</span>{' '}
           <Button
             variant="contained"
             className="rest__button button"
-            onClick={() => {}}
+            onClick={() => append({ key: '', value: '' })}
           >
             Add Header Button
           </Button>
         </div>
+
         <div className="rest__item fullwidth">
-          {' '}
-          <TextField
-            sx={{ width: '45%' }}
-            id="outlined-basic"
-            label="Header Key"
-            variant="outlined"
-          />{' '}
-          <TextField
-            sx={{ width: '45%' }}
-            id="outlined-basic"
-            label="Header Value"
-            variant="outlined"
-          />
+          {fields.map((field, index) => (
+            <div key={field.id} className="rest__item fullwidth">
+              <TextField
+                {...register(`headers.${index}.key`)}
+                sx={{ width: '45%' }}
+                label="Header Key"
+                variant="outlined"
+                error={!!errors.headers?.[index]?.key}
+                helperText={
+                  errors.headers?.[index]?.key ? 'Key is required' : ''
+                }
+              />
+              <TextField
+                {...register(`headers.${index}.value`)}
+                sx={{ width: '45%' }}
+                label="Header Value"
+                variant="outlined"
+                error={!!errors.headers?.[index]?.value}
+                helperText={
+                  errors.headers?.[index]?.value ? 'Value is required' : ''
+                }
+              />
+              <Button variant="contained" onClick={() => remove(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
         </div>
         <div className="rest__item">
           <span>Body: </span>
@@ -134,7 +179,7 @@ const RESTfullForm = () => {
           >
             TXT
           </Button>
-          {chooseField ? elementContent : txtContent}
+          {chooseField ? jsonEditorElement : txtEditorElement}
           {chooseField ? (
             <div className="rest__point">
               for work with item json: the first icon copy to clipboard, the
@@ -154,7 +199,7 @@ const RESTfullForm = () => {
       <div className="rest__item">
         <span>Body:</span>{' '}
         <JsonView
-          data={jsonData}
+          data={{}}
           shouldExpandNode={allExpanded}
           style={defaultStyles}
         />
