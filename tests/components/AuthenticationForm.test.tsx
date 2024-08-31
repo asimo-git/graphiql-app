@@ -5,22 +5,37 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { handleAuthentication } from '../../app/services/firebase';
 import AuthenticationForm from '../../app/components/authentication-form/AuthenticationForm';
+import { registerWithEmailAndPassword } from '@/app/services/firebase';
 
 jest.mock('../../app/services/firebase', () => ({
-  handleAuthentication: jest.fn(),
+  registerWithEmailAndPassword: jest.fn(),
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    // i18n: {
+    //   changeLanguage: jest.fn(),
+    // },
+  }),
 }));
 
 describe('AuthenticationForm', () => {
   it('should render the form with email and password fields', () => {
-    render(<AuthenticationForm />);
+    render(<AuthenticationForm formType="auth" />);
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
   it('should validate the email and password fields', async () => {
-    render(<AuthenticationForm />);
+    render(<AuthenticationForm formType="auth" />);
     fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
 
     expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
@@ -30,7 +45,7 @@ describe('AuthenticationForm', () => {
   });
 
   it('should show password strength bar', async () => {
-    const { container } = render(<AuthenticationForm />);
+    const { container } = render(<AuthenticationForm formType="reg" />);
     const passwordField = screen.getByLabelText(/password/i);
 
     const passwordStrengthBar = container.querySelector(
@@ -54,9 +69,11 @@ describe('AuthenticationForm', () => {
     });
   });
 
-  it('should call handleAuthentication on form submission with valid data', async () => {
-    render(<AuthenticationForm />);
-    (handleAuthentication as jest.Mock).mockResolvedValueOnce('success');
+  it('should call registerWithEmailAndPassword on form submission with valid data', async () => {
+    render(<AuthenticationForm formType="reg" />);
+    (registerWithEmailAndPassword as jest.Mock).mockResolvedValueOnce(
+      'success'
+    );
 
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'test@example.com' },
@@ -64,11 +81,15 @@ describe('AuthenticationForm', () => {
     fireEvent.change(screen.getByLabelText(/password/i), {
       target: { value: 'Password!1' },
     });
+    fireEvent.change(screen.getByLabelText(/name/i), {
+      target: { value: 'Name' },
+    });
 
     fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() =>
-      expect(handleAuthentication).toHaveBeenCalledWith(
+      expect(registerWithEmailAndPassword).toHaveBeenCalledWith(
+        'Name',
         'test@example.com',
         'Password!1'
       )
