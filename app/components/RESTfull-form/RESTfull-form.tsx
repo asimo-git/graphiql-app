@@ -15,17 +15,8 @@ import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import Editor from './TextEditor';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-
-type FormData = {
-  method: string;
-  endpoint: string;
-  headers?: {
-    key: string;
-    value: string;
-  }[];
-  jsonBody?: string;
-  textBody?: string;
-};
+import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import { makeApiRequest } from '@/app/utils/api-interaction';
 
 const RESTfullForm = () => {
   const {
@@ -33,7 +24,7 @@ const RESTfullForm = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<RestFormData>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -41,6 +32,9 @@ const RESTfullForm = () => {
   });
 
   const [chooseField, setchooseField] = useState(true);
+  const [responseData, setResponseData] = useState<
+    ResponseRestData | undefined
+  >(undefined);
 
   const jsonEditorElement = useMemo(
     () => (
@@ -69,8 +63,9 @@ const RESTfullForm = () => {
     [control]
   );
 
-  const onSubmit = async (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: RestFormData) => {
+    const response = await makeApiRequest(data);
+    setResponseData(response);
   };
 
   return (
@@ -194,12 +189,12 @@ const RESTfullForm = () => {
         <span>Response</span>{' '}
       </div>
       <div className="rest__item">
-        <span>Status:</span>{' '}
+        <span>Status: {responseData?.status}</span>{' '}
       </div>
       <div className="rest__item">
         <span>Body:</span>{' '}
         <JsonView
-          data={{}}
+          data={responseData?.body || {}}
           shouldExpandNode={allExpanded}
           style={defaultStyles}
         />
