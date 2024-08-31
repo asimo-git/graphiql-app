@@ -6,6 +6,15 @@ export const GITHUB_LINKS = {
 
 export const RS_REACT_LINK = 'https://rs.school/courses/reactjs';
 
+export const METHODS = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+  HEAD: 'HEAD',
+  OPTIONS: 'OPTIONS',
+
 export const ERROR_MESSAGES: { [key: string]: string } = {
   'auth/email-already-in-use':
     'This email is already registered. Please use a different email or log in',
