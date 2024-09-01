@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import './RESTfull.scss';
 import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { ResponseRestData } from '@/app/utils/types';

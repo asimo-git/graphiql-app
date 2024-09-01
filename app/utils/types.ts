@@ -5,7 +5,7 @@ export type RestFormData = {
     key: string;
     value: string;
   }[];
-  jsonBody?: Record<string, string>;
+  jsonBody?: Record<string, string> | undefined;
   textBody?: string;
 };
 

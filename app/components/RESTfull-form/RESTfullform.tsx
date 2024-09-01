@@ -15,7 +15,7 @@ import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
-import ResponseSection from '../response-section/response-section';
+import ResponseSection from '../response-section/ResponseSection';
 
 const RESTfullForm = () => {
   const {
