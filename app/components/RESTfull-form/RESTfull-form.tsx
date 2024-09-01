@@ -8,7 +8,6 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import './RESTfull.scss';
-import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { JsonEditor } from 'json-edit-react';
 import { useState } from 'react';
@@ -16,6 +15,7 @@ import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
+import ResponseSection from '../response-section/response-section';
 
 const RESTfullForm = () => {
   const {
@@ -183,22 +183,7 @@ const RESTfullForm = () => {
           )}
         </div>
       </form>
-      <div className="rest__item item-title">
-        <span>Response</span>{' '}
-      </div>
-      <div className="rest__item">
-        <span>
-          Status: {responseData?.status} {responseData?.statusText}
-        </span>{' '}
-      </div>
-      <div className="rest__item">
-        <span>Body:</span>{' '}
-        <JsonView
-          data={responseData?.body || {}}
-          shouldExpandNode={allExpanded}
-          style={defaultStyles}
-        />
-      </div>
+      <ResponseSection responseData={responseData} />
     </div>
   );
 };
