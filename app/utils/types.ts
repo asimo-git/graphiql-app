@@ -5,11 +5,12 @@ export type RestFormData = {
     key: string;
     value: string;
   }[];
-  jsonBody?: string;
+  jsonBody?: Record<string, string>;
   textBody?: string;
 };
 
 export type ResponseRestData = {
   status: number;
+  statusText: string;
   body: Record<string, string>;
 };

@@ -13,7 +13,6 @@ import 'react-json-view-lite/dist/index.css';
 import { JsonEditor } from 'json-edit-react';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
-import Editor from './TextEditor';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
@@ -47,17 +46,6 @@ const RESTfullForm = () => {
             setData={(newValue) => onChange(newValue)}
           />
         )}
-      />
-    ),
-    [control]
-  );
-
-  const txtEditorElement = useMemo(
-    () => (
-      <Controller
-        control={control}
-        name="textBody"
-        render={({ field }) => <Editor setTextContent={field.onChange} />}
       />
     ),
     [control]
@@ -174,7 +162,17 @@ const RESTfullForm = () => {
           >
             TXT
           </Button>
-          {chooseField ? jsonEditorElement : txtEditorElement}
+          {chooseField ? (
+            jsonEditorElement
+          ) : (
+            <TextField
+              {...register('textBody')}
+              sx={{ width: '50%', marginRight: '10%' }}
+              id="outlined-basic"
+              label="Body"
+              variant="outlined"
+            />
+          )}
           {chooseField ? (
             <div className="rest__point">
               for work with item json: the first icon copy to clipboard, the
@@ -189,7 +187,9 @@ const RESTfullForm = () => {
         <span>Response</span>{' '}
       </div>
       <div className="rest__item">
-        <span>Status: {responseData?.status}</span>{' '}
+        <span>
+          Status: {responseData?.status} {responseData?.statusText}
+        </span>{' '}
       </div>
       <div className="rest__item">
         <span>Body:</span>{' '}

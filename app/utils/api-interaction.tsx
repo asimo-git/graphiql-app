@@ -14,7 +14,7 @@ export async function makeApiRequest(
 
   let body = undefined;
   if (method !== 'GET' && method !== 'HEAD') {
-    body = jsonBody ?? textBody;
+    body = JSON.stringify(jsonBody) ?? textBody;
   }
 
   const requestOptions: RequestInit = {
@@ -26,8 +26,20 @@ export async function makeApiRequest(
 
   try {
     const response: Response = await fetch(endpoint, requestOptions);
+    if (!response.ok) {
+      const data = await response.text();
+      return {
+        status: response.status,
+        statusText: response.statusText,
+        body: { error: data },
+      };
+    }
     const data = await response.json();
-    return { status: response.status, body: data };
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      body: data,
+    };
   } catch (error) {
     console.error('Error making fetch request:', error);
   }
