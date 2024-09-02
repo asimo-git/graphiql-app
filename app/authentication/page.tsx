@@ -10,13 +10,12 @@ import styles from '../components/main/Main.module.scss';
 
 export default function AuthenticationPage() {
   const router = useRouter();
-  const user = useAuthenticated();
+  const { user, isLoading } = useAuthenticated();
   const { t } = useTranslation();
-  console.log(user);
 
   return (
     <>
-      {user !== undefined ? (
+      {isLoading ? (
         !user ? (
           <>
             <Header />

@@ -7,11 +7,11 @@ import { useAuthenticated } from './utils/Auth';
 import styles from './components/main/Main.module.scss';
 
 export default function Welcome() {
-  const user = useAuthenticated();
+  const { user, isLoading } = useAuthenticated();
   return (
     <>
       <Header />
-      {user !== undefined ? (
+      {isLoading ? (
         user ? (
           <MainHome />
         ) : (
