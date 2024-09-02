@@ -47,7 +47,7 @@ describe('RESTfullForm Component', () => {
   it('should allow to add and remove headers', async () => {
     render(<RESTfullForm />);
 
-    fireEvent.click(screen.getByText('Add Header Button'));
+    fireEvent.click(screen.getByText('Add Header'));
     expect(screen.getAllByLabelText('Header Key').length).toBe(1);
     expect(screen.getAllByLabelText('Header Value').length).toBe(1);
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { ResponseRestData } from '@/app/utils/types';
+import './ResponseSection.scss';
 
 const ResponseSection = ({
   responseData,
@@ -19,7 +20,7 @@ const ResponseSection = ({
           Status: {responseData?.status} {responseData?.statusText}
         </span>{' '}
       </div>
-      <div className="rest__item">
+      <div className="rest__item response-body">
         <span>Body:</span>{' '}
         <JsonView
           data={responseData?.body || {}}

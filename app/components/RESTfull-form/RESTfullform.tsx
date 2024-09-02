@@ -37,16 +37,18 @@ const RESTfullForm = () => {
 
   const jsonEditorElement = useMemo(
     () => (
-      <Controller
-        control={control}
-        name="jsonBody"
-        render={({ field: { onChange, value } }) => (
-          <JsonEditor
-            data={value || {}}
-            setData={(newValue) => onChange(newValue)}
-          />
-        )}
-      />
+      <div className="body__editor json__editor">
+        <Controller
+          control={control}
+          name="jsonBody"
+          render={({ field: { onChange, value } }) => (
+            <JsonEditor
+              data={value || {}}
+              setData={(newValue) => onChange(newValue)}
+            />
+          )}
+        />
+      </div>
     ),
     [control]
   );
@@ -61,8 +63,8 @@ const RESTfullForm = () => {
       <h1 className="rest__title">REST Client</h1>
       <form className="rest__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="rest__item">
-          <Box className="rest__box">
-            <FormControl sx={{ width: '20%', marginRight: '10%' }}>
+          <Box className="rest__box fullwidth">
+            <FormControl sx={{ width: '20%', marginRight: '2%' }}>
               <InputLabel id="demo-simple-select-label">Method</InputLabel>
               <Select
                 {...register('method')}
@@ -82,7 +84,7 @@ const RESTfullForm = () => {
             </FormControl>
             <TextField
               {...register('endpoint', { required: true })}
-              sx={{ width: '50%', marginRight: '10%' }}
+              sx={{ width: '60%', marginRight: '2%' }}
               id="outlined-basic"
               label="Endpoint URL"
               variant="outlined"
@@ -92,7 +94,7 @@ const RESTfullForm = () => {
 
             <Button
               variant="contained"
-              className="rest__button button"
+              sx={{ width: '16%' }}
               type="submit"
               onClick={() => {}}
             >
@@ -105,19 +107,18 @@ const RESTfullForm = () => {
           <span>Headers:</span>{' '}
           <Button
             variant="contained"
-            className="rest__button button"
             onClick={() => append({ key: '', value: '' })}
           >
-            Add Header Button
+            Add Header
           </Button>
         </div>
 
-        <div className="rest__item fullwidth">
+        <div className="rest__item">
           {fields.map((field, index) => (
             <div key={field.id} className="rest__item fullwidth">
               <TextField
                 {...register(`headers.${index}.key`)}
-                sx={{ width: '45%' }}
+                sx={{ width: '40%', marginRight: '2%', height: '100%' }}
                 label="Header Key"
                 variant="outlined"
                 error={!!errors.headers?.[index]?.key}
@@ -127,7 +128,7 @@ const RESTfullForm = () => {
               />
               <TextField
                 {...register(`headers.${index}.value`)}
-                sx={{ width: '45%' }}
+                sx={{ width: '40%', marginRight: '2%', height: '100%' }}
                 label="Header Value"
                 variant="outlined"
                 error={!!errors.headers?.[index]?.value}
@@ -135,18 +136,22 @@ const RESTfullForm = () => {
                   errors.headers?.[index]?.value ? 'Value is required' : ''
                 }
               />
-              <Button variant="contained" onClick={() => remove(index)}>
+              <Button
+                variant="contained"
+                onClick={() => remove(index)}
+                sx={{ width: '16%' }}
+              >
                 Remove
               </Button>
             </div>
           ))}
         </div>
+
         <div className="rest__item">
           <span>Body: </span>
           <Button
-            sx={{ marginRight: '1%' }}
+            sx={{ margin: '2%', width: '16%' }}
             variant="contained"
-            className="rest__button button"
             onClick={() => {
               setchooseField(true);
             }}
@@ -154,8 +159,8 @@ const RESTfullForm = () => {
             JSON
           </Button>
           <Button
+            sx={{ margin: '2%', width: '16%' }}
             variant="contained"
-            className="rest__button button"
             onClick={() => {
               setchooseField(false);
             }}
@@ -166,9 +171,12 @@ const RESTfullForm = () => {
             jsonEditorElement
           ) : (
             <TextField
+              sx={{ minHeight: '100px' }}
+              className="body__editor"
               {...register('textBody')}
-              sx={{ width: '50%', marginRight: '10%' }}
               id="outlined-basic"
+              multiline
+              // rows={6}
               label="Body"
               variant="outlined"
             />
