@@ -3,6 +3,37 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import Header from '../../app/components/header/Header';
 import '@testing-library/jest-dom';
 
+jest.mock('../../app/services/firebase', () => ({
+  getAuth: jest.fn(),
+}));
+jest.mock('firebase/auth', () => ({
+  onAuthStateChanged: jest.fn((auth, callback) => {
+    const mockUser = { uid: '12345', email: 'test@example.com' };
+    setTimeout(() => callback(mockUser), 0);
+  }),
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    };
+  },
+  initReactI18next: {
+    type: '3rdParty',
+    init: jest.fn(),
+  },
+}));
+
 describe('Header', () => {
   beforeEach(() => {
     render(<Header />);
@@ -27,9 +58,8 @@ describe('Header', () => {
   });
   describe('SignIn', () => {
     it('should render button', () => {
-      const buttonElement = screen.getByRole('link', { name: /sign in/i });
+      const buttonElement = screen.getByRole('button');
       expect(buttonElement).toHaveTextContent('Sign in');
-      expect(buttonElement).toHaveAttribute('href', 'https://rs.school/');
     });
   });
 });
