@@ -3,31 +3,50 @@
 }
 
 .rest__container {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	overflow-y: auto;
-	padding-top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  padding-top: 70px;
 }
 
 .rest__form {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  button,
+  input,
+  select {
+    box-sizing: border-box;
+    height: 56px;
+  }
+
+  .body__editor {
+    width: 80%;
+    margin: 2% auto;
+    min-height: 100px;
+  }
 }
 
 .fullwidth {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2%;
 }
 
 .item-title {
-	font-weight: 700;
-	font-size: 24px;
-	text-align: center;
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
 }
 
 .rest__point {
-	font-weight: 700;
-	font-size: 12px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.json__editor {
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
 }

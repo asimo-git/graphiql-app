@@ -15,6 +15,7 @@ export const METHODS = {
   HEAD: 'HEAD',
   OPTIONS: 'OPTIONS',
 };
+
 export const ERROR_MESSAGES: { [key: string]: string } = {
   'auth/email-already-in-use':
     'This email is already registered. Please use a different email or log in',

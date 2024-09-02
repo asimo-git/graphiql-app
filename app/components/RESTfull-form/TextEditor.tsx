@@ -1,5 +1,5 @@
 import { EditorState } from 'lexical';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -9,10 +9,12 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getRoot } from 'lexical';
 
-const theme = {};
-
 function onError(error: Error) {
   console.error(error);
+}
+
+interface EditorProps {
+  setTextContent: (text: string) => void;
 }
 
 interface MyOnChangePluginProps {
@@ -30,12 +32,9 @@ const MyOnChangePlugin: React.FC<MyOnChangePluginProps> = ({ onChange }) => {
   return null;
 };
 
-export default function Editor() {
-  const [textContent, setTextContent] = useState<string>('');
-
+export default function Editor({ setTextContent }: EditorProps) {
   const initialConfig = {
     namespace: 'MyEditor',
-    theme,
     onError,
   };
 
@@ -44,7 +43,6 @@ export default function Editor() {
       const root = $getRoot();
       const text = root.getTextContent();
       setTextContent(text);
-      console.log(textContent);
     });
   }
 

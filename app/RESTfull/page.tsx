@@ -2,7 +2,7 @@
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import './RESTfull.scss';
-import RESTfullForm from '../components/RESTfull-form/RESTfull-form';
+import RESTfullForm from '../components/RESTfull-form/RESTfullform';
 
 export default function RESTfullPage() {
   return (
