@@ -16,6 +16,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
+import VariablesSection from '../variables-section/VariablesSection';
 
 const RESTfullForm = () => {
   const {
@@ -146,6 +147,8 @@ const RESTfullForm = () => {
             </div>
           ))}
         </div>
+
+        <VariablesSection control={control} register={register} />
 
         <div className="rest__item">
           <span>Body: </span>

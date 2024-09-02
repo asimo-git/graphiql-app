@@ -7,6 +7,10 @@ export type RestFormData = {
   }[];
   jsonBody?: Record<string, string> | undefined;
   textBody?: string;
+  variables?: {
+    key: string;
+    value: string;
+  }[];
 };
 
 export type ResponseRestData = {
