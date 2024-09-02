@@ -19,7 +19,7 @@ export default function Header() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const user = useAuthenticated();
+  const { user, isLoading } = useAuthenticated();
 
   const [buttonText, setButtonText] = useState('Sign in');
   useEffect(() => {
@@ -39,10 +39,12 @@ export default function Header() {
     []
   );
   const handleClick = () => {
-    if (user) {
-      logout(auth);
-    } else {
-      router.push(Routes.Authentication);
+    if (isLoading) {
+      if (user) {
+        logout(auth);
+      } else {
+        router.push(Routes.Authentication);
+      }
     }
   };
   return (

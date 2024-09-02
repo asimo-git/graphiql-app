@@ -4,13 +4,22 @@ import Footer from './components/footer/Footer';
 import MainWelcome from './components/main/MainWelcome';
 import MainHome from './components/main/MainHome';
 import { useAuthenticated } from './utils/Auth';
+import styles from './components/main/Main.module.scss';
 
 export default function Welcome() {
-  const user = useAuthenticated();
+  const { user, isLoading } = useAuthenticated();
   return (
     <>
       <Header />
-      {user ? <MainHome /> : <MainWelcome />}
+      {isLoading ? (
+        user ? (
+          <MainHome />
+        ) : (
+          <MainWelcome />
+        )
+      ) : (
+        <main className={styles.main}></main>
+      )}
       <Footer />
     </>
   );
