@@ -43,5 +43,6 @@
   "Пароль должен быть не менее 8 символов": "Password must be at least 8 characters long",
   "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character",
   "для работы с элементом json: первая иконка копировать в буфер обмена, вторая редактировать, третья удалить": "for work with item json: the first icon copy to clipboard, the second edit, the third delete",
-  "REST Клиент": "REST Client"
+  "REST Клиент": "REST Client",
+  "Удалить": "Remove" 
 }

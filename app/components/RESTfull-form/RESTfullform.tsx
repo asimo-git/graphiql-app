@@ -17,6 +17,7 @@ import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import { useTranslation } from 'react-i18next';
+import { urlRESTfull } from '@/app/utils/url-restfull';
 
 const RESTfullForm = () => {
   const {
@@ -54,11 +55,18 @@ const RESTfullForm = () => {
     [control]
   );
 
+  const handleUpdateUrl = (newUrl: string) => {
+    window.history.pushState({}, '', newUrl);
+  };
+
   const onSubmit = async (data: RestFormData) => {
+    handleUpdateUrl(urlRESTfull(data));
     const response = await makeApiRequest(data);
     setResponseData(response);
   };
+
   const { t } = useTranslation();
+
   return (
     <div className="rest__container">
       <h1 className="rest__title">{t('REST Client')}</h1>
@@ -144,7 +152,7 @@ const RESTfullForm = () => {
                 onClick={() => remove(index)}
                 sx={{ width: '16%' }}
               >
-                Remove
+                {t('Remove')}
               </Button>
             </div>
           ))}
