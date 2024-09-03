@@ -1,9 +1,9 @@
-import { ResponseRestData, RestFormData } from './types';
+import { ResponseRestData, RestRequestData } from './types';
 
 export async function makeApiRequest(
-  formData: RestFormData
+  requestData: RestRequestData
 ): Promise<ResponseRestData | undefined> {
-  const { method, endpoint, headers, jsonBody, textBody } = formData;
+  const { method, endpoint, headers, jsonBody, textBody } = requestData;
 
   const fetchHeaders = new Headers();
   headers?.forEach(({ key, value }) => {
@@ -14,7 +14,7 @@ export async function makeApiRequest(
 
   let body = undefined;
   if (method !== 'GET' && method !== 'HEAD') {
-    body = JSON.stringify(jsonBody) ?? textBody;
+    body = jsonBody ?? textBody;
   }
 
   const requestOptions: RequestInit = {

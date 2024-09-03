@@ -31,13 +31,13 @@ const VariablesSection = ({
         {fields.map((field, index) => (
           <div key={field.id} className="rest__item fullwidth">
             <TextField
-              {...register(`headers.${index}.key`)}
+              {...register(`variables.${index}.key`)}
               sx={{ width: '40%', marginRight: '2%', height: '100%' }}
               label="Variable Key"
               variant="outlined"
             />
             <TextField
-              {...register(`headers.${index}.value`)}
+              {...register(`variables.${index}.value`)}
               sx={{ width: '40%', marginRight: '2%', height: '100%' }}
               label="Variable Value"
               variant="outlined"

@@ -17,6 +17,7 @@ import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
+import { parseWithVariables } from '@/app/utils/helpers';
 
 const RESTfullForm = () => {
   const {
@@ -55,7 +56,19 @@ const RESTfullForm = () => {
   );
 
   const onSubmit = async (data: RestFormData) => {
-    const response = await makeApiRequest(data);
+    const { variables, jsonBody, ...rest } = data;
+
+    let requestData = {
+      ...rest,
+      jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
+    };
+    console.log(variables);
+
+    if (variables) {
+      requestData = parseWithVariables(requestData, variables);
+    }
+    console.log(requestData);
+    const response = await makeApiRequest(requestData);
     setResponseData(response);
   };
 
@@ -179,7 +192,6 @@ const RESTfullForm = () => {
               {...register('textBody')}
               id="outlined-basic"
               multiline
-              // rows={6}
               label="Body"
               variant="outlined"
             />
