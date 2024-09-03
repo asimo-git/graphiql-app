@@ -24,15 +24,12 @@ export default function Header() {
   const [buttonText, setButtonText] = useState('Sign in');
   useEffect(() => {
     const translationKey = user ? 'Sign out' : 'Sign in';
-    setButtonText(t(translationKey));
-  }, [user, t]);
+    setButtonText(translationKey);
+  }, [user]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newLanguage = event.target.checked ? 'ru' : 'en';
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', event.target.checked ? 'en' : 'ru');
-      }
       i18n.changeLanguage(newLanguage);
       setChecked(event.target.checked);
     },
