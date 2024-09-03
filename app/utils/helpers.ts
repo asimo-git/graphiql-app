@@ -6,3 +6,8 @@ export const getPasswordStrengthPercentage = (password: string) => {
   if (/[^a-zA-Z0-9\s]/.test(password)) strength += 25;
   return strength;
 };
+export const stringToBase64 = (str: string) => {
+  const bytes = new TextEncoder().encode(str);
+  const base64 = btoa(String.fromCharCode(...bytes));
+  return base64;
+};
