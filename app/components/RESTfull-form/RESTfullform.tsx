@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import './RESTfull.scss';
 import 'react-json-view-lite/dist/index.css';
-// import { JsonEditor } from 'json-edit-react';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -19,12 +18,14 @@ import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
 import { parseWithVariables } from '@/app/utils/helpers';
 
+// dynamic import to fix the error ReferenceError: document is not defined
+// at E (./node_modules/json-edit-react/build/index.esm.js:27:14077)
 import dynamic from 'next/dynamic';
-
 const JsonEditor = dynamic(
   () => import('json-edit-react').then((mod) => mod.JsonEditor),
   { ssr: false }
 );
+////////
 
 const RESTfullForm = () => {
   const {
