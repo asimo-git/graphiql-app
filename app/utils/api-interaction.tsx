@@ -41,6 +41,15 @@ export async function makeApiRequest(
       body: data,
     };
   } catch (error) {
-    console.error('Error making fetch request:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    return {
+      status: 0,
+      statusText: 'Unknown error',
+      body: {
+        error: 'Error making fetch request, try again later',
+        message: errorMessage,
+      },
+    };
   }
 }

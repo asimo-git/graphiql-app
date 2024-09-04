@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import './RESTfull.scss';
 import 'react-json-view-lite/dist/index.css';
-import { JsonEditor } from 'json-edit-react';
+// import { JsonEditor } from 'json-edit-react';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -18,6 +18,13 @@ import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
 import { parseWithVariables } from '@/app/utils/helpers';
+
+import dynamic from 'next/dynamic';
+
+const JsonEditor = dynamic(
+  () => import('json-edit-react').then((mod) => mod.JsonEditor),
+  { ssr: false }
+);
 
 const RESTfullForm = () => {
   const {
@@ -36,6 +43,7 @@ const RESTfullForm = () => {
   const [responseData, setResponseData] = useState<
     ResponseRestData | undefined
   >(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const jsonEditorElement = useMemo(
     () => (
@@ -56,20 +64,20 @@ const RESTfullForm = () => {
   );
 
   const onSubmit = async (data: RestFormData) => {
+    setIsLoading(true);
     const { variables, jsonBody, ...rest } = data;
 
     let requestData = {
       ...rest,
       jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
     };
-    console.log(variables);
 
     if (variables) {
       requestData = parseWithVariables(requestData, variables);
     }
-    console.log(requestData);
     const response = await makeApiRequest(requestData);
     setResponseData(response);
+    setIsLoading(false);
   };
 
   return (
@@ -206,7 +214,7 @@ const RESTfullForm = () => {
           )}
         </div>
       </form>
-      <ResponseSection responseData={responseData} />
+      <ResponseSection isLoading={isLoading} responseData={responseData} />
     </div>
   );
 };
