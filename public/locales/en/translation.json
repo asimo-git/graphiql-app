@@ -44,5 +44,6 @@
   "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character",
   "для работы с элементом json: первая иконка копировать в буфер обмена, вторая редактировать, третья удалить": "for work with item json: the first icon copy to clipboard, the second edit, the third delete",
   "REST Клиент": "REST Client",
-  "Удалить": "Remove" 
+  "Удалить": "Remove",
+  "Студент школы RS School. Закончил  JavaScript / Front-end курс в 2024 году, студент курса React": "Student of the RS School. Completed the JavaScript / Front-end Course in 2024, student of the React Course."
 }
