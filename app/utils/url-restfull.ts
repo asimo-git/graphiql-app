@@ -2,7 +2,7 @@ import { stringToBase64 } from './helpers';
 import { RestFormData } from './types';
 
 export function urlRESTfull(data: RestFormData): string {
-  const mainUrl = 'http://localhost:3000';
+  const mainUrl = window.location.href;
 
   let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
 
