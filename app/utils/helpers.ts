@@ -51,3 +51,10 @@ export function parseWithVariables(
 
   return requestDataWithVariables;
 }
+
+export const stringToBase64 = (str: string) => {
+  const bytes = new TextEncoder().encode(str);
+  const base64 = btoa(String.fromCharCode(...bytes));
+  return base64;
+};
+
