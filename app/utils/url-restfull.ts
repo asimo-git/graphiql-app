@@ -1,8 +1,8 @@
 import { stringToBase64 } from './helpers';
 import { RestFormData } from './types';
 
-export function urlRESTfull(data: RestFormData): string {
-  const mainUrl = window.location.href;
+export function urlRESTfull(data: RestFormData, mainUrl: string): string {
+  // const mainUrl = window.location.href;
 
   let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
 
@@ -14,11 +14,9 @@ export function urlRESTfull(data: RestFormData): string {
 
   const queryParams = new URLSearchParams();
 
-  if (data.headers) {
+  if (data.headers.length > 0) {
     data.headers.forEach((header) => {
-      if (header) {
-        queryParams.append(header.key, stringToBase64(header.value));
-      }
+      queryParams.append(header.key, stringToBase64(header.value));
     });
   }
 

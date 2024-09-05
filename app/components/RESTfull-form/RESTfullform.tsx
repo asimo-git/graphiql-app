@@ -18,8 +18,10 @@ import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import { useTranslation } from 'react-i18next';
 import { urlRESTfull } from '@/app/utils/url-restfull';
+import { usePathname } from 'next/navigation';
 
 const RESTfullForm = () => {
+  const mainUrl = usePathname();
   const {
     register,
     handleSubmit,
@@ -60,7 +62,7 @@ const RESTfullForm = () => {
   };
 
   const onSubmit = async (data: RestFormData) => {
-    handleUpdateUrl(urlRESTfull(data));
+    handleUpdateUrl(urlRESTfull(data, mainUrl));
     const response = await makeApiRequest(data);
     setResponseData(response);
   };
