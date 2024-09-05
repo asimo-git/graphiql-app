@@ -1,4 +1,4 @@
-import { RestRequestData } from './types';
+import { KeyValueArray, RestRequestData } from './types';
 
 export const getPasswordStrengthPercentage = (password: string) => {
   let strength = 0;
@@ -28,7 +28,7 @@ export function parseWithVariables(
     text.replace(/{{(\w+)}}/g, (match, key) => variablesObj[key] || match);
 
   const processValue = (
-    value: string | { key: string; value: string }[] | undefined
+    value?: string | KeyValueArray
   ): string | { key: string; value: string }[] | undefined => {
     if (typeof value === 'string') {
       return replaceTemplates(value);

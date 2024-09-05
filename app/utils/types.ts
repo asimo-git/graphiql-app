@@ -1,26 +1,17 @@
 export type RestFormData = {
   method: string;
   endpoint: string;
-  headers?: {
-    key: string;
-    value: string;
-  }[];
-  jsonBody: Record<string, string> | undefined;
+  headers: KeyValueArray;
+  jsonBody?: Record<string, string>;
   textBody?: string;
-  variables?: {
-    key: string;
-    value: string;
-  }[];
+  variables?: KeyValueArray;
 };
 
 export type RestRequestData = {
   method: string;
   endpoint: string;
-  headers?: {
-    key: string;
-    value: string;
-  }[];
-  jsonBody: string | undefined;
+  headers?: KeyValueArray;
+  jsonBody?: string;
   textBody?: string;
 };
 
@@ -29,3 +20,8 @@ export type ResponseRestData = {
   statusText: string;
   body: Record<string, string>;
 };
+
+export type KeyValueArray = {
+  key: string;
+  value: string;
+}[];

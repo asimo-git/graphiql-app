@@ -41,8 +41,7 @@ export async function makeApiRequest(
       body: data,
     };
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage = (error as Error)?.message ?? 'Unknown error';
     return {
       status: 0,
       statusText: 'Unknown error',

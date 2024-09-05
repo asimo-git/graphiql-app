@@ -40,5 +40,9 @@
   "Недопустимый адрес электронной почты": "Invalid email address",
   "Пароль обязателен": "Password is required",
   "Пароль должен быть не менее 8 символов": "Password must be at least 8 characters long",
-  "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character"
+  "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ": "Password must contain at least one letter, one digit, and one special character",
+  "Удалить": "Remove",
+  "Добавить переменную": "Add Variable",
+  "Имя переменной": "Variable Key",
+  "Значение переменной": "Variable Value"
 }

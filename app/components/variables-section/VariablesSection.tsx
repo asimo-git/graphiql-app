@@ -2,6 +2,7 @@ import React from 'react';
 import { Control, useFieldArray, UseFormRegister } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
 import { RestFormData } from '@/app/utils/types';
+import { useTranslation } from 'react-i18next';
 
 const VariablesSection = ({
   control,
@@ -10,6 +11,8 @@ const VariablesSection = ({
   control: Control<RestFormData>;
   register: UseFormRegister<RestFormData>;
 }) => {
+  const { t } = useTranslation();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'variables',
@@ -18,12 +21,12 @@ const VariablesSection = ({
   return (
     <>
       <div className="rest__item">
-        <span>Variables:</span>{' '}
+        <span>{t('Variables:')}</span>{' '}
         <Button
           variant="contained"
           onClick={() => append({ key: '', value: '' })}
         >
-          Add Variable
+          {t('Add Variable')}
         </Button>
       </div>
 
@@ -33,13 +36,13 @@ const VariablesSection = ({
             <TextField
               {...register(`variables.${index}.key`)}
               sx={{ width: '40%', marginRight: '2%', height: '100%' }}
-              label="Variable Key"
+              label={t('Variable Key')}
               variant="outlined"
             />
             <TextField
               {...register(`variables.${index}.value`)}
               sx={{ width: '40%', marginRight: '2%', height: '100%' }}
-              label="Variable Value"
+              label={t('Variable Value')}
               variant="outlined"
             />
             <Button
@@ -47,7 +50,7 @@ const VariablesSection = ({
               onClick={() => remove(index)}
               sx={{ width: '16%' }}
             >
-              Remove
+              {t('Remove')}
             </Button>
           </div>
         ))}
