@@ -27,11 +27,13 @@ export async function makeApiRequest(
   try {
     const response: Response = await fetch(endpoint, requestOptions);
     if (!response.ok) {
-      const data = await response.text();
       return {
         status: response.status,
         statusText: response.statusText,
-        body: { error: data },
+        body: {
+          error:
+            'The resource cannot give a correct response to your request. Please check the entered data, the selected method and try to repeat the request.',
+        },
       };
     }
     const data = await response.json();
