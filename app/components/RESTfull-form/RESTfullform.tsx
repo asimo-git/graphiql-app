@@ -16,8 +16,12 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
+import { useTranslation } from 'react-i18next';
+import { urlRESTfull } from '@/app/utils/url-restfull';
+import { usePathname } from 'next/navigation';
 
 const RESTfullForm = () => {
+  const mainUrl = usePathname();
   const {
     register,
     handleSubmit,
@@ -53,19 +57,28 @@ const RESTfullForm = () => {
     [control]
   );
 
+  const handleUpdateUrl = (newUrl: string) => {
+    window.history.pushState({}, '', newUrl);
+  };
+
   const onSubmit = async (data: RestFormData) => {
+    handleUpdateUrl(urlRESTfull(data, mainUrl));
     const response = await makeApiRequest(data);
     setResponseData(response);
   };
 
+  const { t } = useTranslation();
+
   return (
     <div className="rest__container">
-      <h1 className="rest__title">REST Client</h1>
+      <h1 className="rest__title">{t('REST Client')}</h1>
       <form className="rest__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="rest__item">
           <Box className="rest__box fullwidth">
             <FormControl sx={{ width: '20%', marginRight: '2%' }}>
-              <InputLabel id="demo-simple-select-label">Method</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                {t('Method')}
+              </InputLabel>
               <Select
                 {...register('method')}
                 labelId="demo-simple-select-label"
@@ -86,7 +99,7 @@ const RESTfullForm = () => {
               {...register('endpoint', { required: true })}
               sx={{ width: '60%', marginRight: '2%' }}
               id="outlined-basic"
-              label="Endpoint URL"
+              label={t('Endpoint URL')}
               variant="outlined"
               error={!!errors.endpoint}
               helperText={errors.endpoint ? 'Endpoint is required' : ''}
@@ -98,18 +111,18 @@ const RESTfullForm = () => {
               type="submit"
               onClick={() => {}}
             >
-              Send
+              {t('Submit')}
             </Button>
           </Box>
         </div>
 
         <div className="rest__item">
-          <span>Headers:</span>{' '}
+          <span>{t('Headers')} </span>
           <Button
             variant="contained"
             onClick={() => append({ key: '', value: '' })}
           >
-            Add Header
+            {t('Add Header')}
           </Button>
         </div>
 
@@ -141,14 +154,14 @@ const RESTfullForm = () => {
                 onClick={() => remove(index)}
                 sx={{ width: '16%' }}
               >
-                Remove
+                {t('Remove')}
               </Button>
             </div>
           ))}
         </div>
 
         <div className="rest__item">
-          <span>Body: </span>
+          <span>{t('Body')} </span>
           <Button
             sx={{ margin: '2%', width: '16%' }}
             variant="contained"
@@ -183,8 +196,9 @@ const RESTfullForm = () => {
           )}
           {chooseField ? (
             <div className="rest__point">
-              for work with item json: the first icon copy to clipboard, the
-              second edit, the third delete
+              {t(
+                'for work with item json: the first icon copy to clipboard, the second edit, the third delete'
+              )}
             </div>
           ) : (
             ''

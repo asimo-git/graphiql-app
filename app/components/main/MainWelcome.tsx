@@ -4,6 +4,7 @@ import { Link } from '@mui/material';
 import Routes from '@/app/utils/routes';
 import styles from './Main.module.scss';
 import { useTranslation } from 'react-i18next';
+import Info from '../info/Info';
 
 export default function MainWelcome() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export default function MainWelcome() {
       <Link href={Routes.Registration} underline="hover">
         {t('Sign Up')}
       </Link>
+      <Info />
     </main>
   );
 }
