@@ -1,4 +1,24 @@
 .info {
 	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 24px 0;
+}
+
+.main__developers {
+	display: flex;
 	gap: 24px;
+}
+
+.info__text {
+	text-align: justify;
+	text-indent: 16px;
+}
+
+.info__title {
+	margin-bottom: 16px;
+}
+
+.info__sub-title {
+	margin-bottom: 16px;
 }
