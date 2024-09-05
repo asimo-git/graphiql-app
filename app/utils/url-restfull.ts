@@ -1,23 +1,23 @@
 import { stringToBase64 } from './helpers';
+import { RestFormData } from './types';
 
-export function urlRESTfull(
-  method: string,
-  url: string,
-  body: object | null = null,
-  headers: Record<string, string> = {}
-): string {
-  const mainUrl = 'http://localhost:3000';
+export function urlRESTfull(data: RestFormData, mainUrl: string): string {
+  // const mainUrl = window.location.href;
 
-  let needUrl = `${mainUrl}/${method}/${stringToBase64(url)}`;
+  let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
 
-  if (body) {
-    needUrl += `/${stringToBase64(JSON.stringify(body))}`;
+  if (data.jsonBody) {
+    needUrl += `/${stringToBase64(JSON.stringify(data.jsonBody))}`;
+  } else if (data.textBody) {
+    needUrl += `/${stringToBase64(data.textBody)}`;
   }
 
   const queryParams = new URLSearchParams();
 
-  for (const [key, value] of Object.entries(headers)) {
-    queryParams.append(key, stringToBase64(value));
+  if (data.headers.length > 0) {
+    data.headers.forEach((header) => {
+      queryParams.append(header.key, stringToBase64(header.value));
+    });
   }
 
   if (queryParams.toString()) {

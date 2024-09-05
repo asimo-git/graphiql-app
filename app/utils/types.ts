@@ -1,7 +1,7 @@
 export type RestFormData = {
   method: string;
   endpoint: string;
-  headers?: {
+  headers: {
     key: string;
     value: string;
   }[];
