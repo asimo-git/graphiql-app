@@ -84,12 +84,12 @@ const RESTfullForm = () => {
     if (variables) {
       requestData = parseWithVariables(requestData, variables);
     }
-    
+
     handleUpdateUrl(urlRESTfull(data, mainUrl));
-    
+
     const response = await makeApiRequest(requestData);
     setResponseData(response);
-    
+
     setIsLoading(false);
   };
 

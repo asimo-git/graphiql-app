@@ -3,6 +3,10 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { JsonEditor, JsonData } from 'json-edit-react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import ResponseSection from '../response-section/ResponseSection';
+import VariablesSection from '../variables-section/VariablesSection';
 import styles from './GraphQLForm.module.scss';
 
 const GraphQLForm = () => {
@@ -10,16 +14,32 @@ const GraphQLForm = () => {
     key1: 'value1',
     key2: 'value2',
   });
-  const [jsonDataVariables, setJsonDataVariables] = useState<JsonData>({
-    key1: 'value1',
-    key2: 'value2',
-  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [responseData, setResponseData] = useState<
+    ResponseRestData | undefined
+  >(undefined);
 
   const handleSetJsonDataQuery = (data: JsonData) => {
     setJsonDataQuery(data);
   };
-  const handleSetJsonDataVariables = (data: JsonData) => {
-    setJsonDataVariables(data);
+
+  const {
+    register,
+    control,
+    // formState: { errors },
+  } = useForm<RestFormData>();
+
+  const handleQuerySubmit = async () => {
+    setIsLoading(true);
+    try {
+      // const response = await fetch('');
+      setResponseData(undefined);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,10 +84,16 @@ const GraphQLForm = () => {
       <h2>Query:</h2>
       <JsonEditor data={jsonDataQuery} setData={handleSetJsonDataQuery} />
       <h2>Variables:</h2>
-      <JsonEditor
-        data={jsonDataVariables}
-        setData={handleSetJsonDataVariables}
-      />
+      <VariablesSection control={control} register={register} />
+      <Button
+        variant="contained"
+        className="rest__button button"
+        onClick={handleQuerySubmit}
+        disabled={isLoading}
+      >
+        {isLoading ? 'Loading...' : 'Send Request'}
+      </Button>
+      <ResponseSection isLoading={isLoading} responseData={responseData} />
     </div>
   );
 };
