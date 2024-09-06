@@ -1,5 +1,4 @@
 'use client';
-
 import { Link } from '@mui/material';
 import Routers from '../../utils/routes';
 import styles from './Main.module.scss';

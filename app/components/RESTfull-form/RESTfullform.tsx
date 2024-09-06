@@ -9,16 +9,26 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import './RESTfull.scss';
 import 'react-json-view-lite/dist/index.css';
-import { JsonEditor } from 'json-edit-react';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
+import VariablesSection from '../variables-section/VariablesSection';
+import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
+
+// dynamic import to fix the error ReferenceError: document is not defined
+// at E (./node_modules/json-edit-react/build/index.esm.js:27:14077)
+import dynamic from 'next/dynamic';
+const JsonEditor = dynamic(
+  () => import('json-edit-react').then((mod) => mod.JsonEditor),
+  { ssr: false }
+);
+////////
 
 const RESTfullForm = () => {
   const mainUrl = usePathname();
@@ -38,6 +48,7 @@ const RESTfullForm = () => {
   const [responseData, setResponseData] = useState<
     ResponseRestData | undefined
   >(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const jsonEditorElement = useMemo(
     () => (
@@ -62,9 +73,24 @@ const RESTfullForm = () => {
   };
 
   const onSubmit = async (data: RestFormData) => {
+    setIsLoading(true);
+    const { variables, jsonBody, ...rest } = data;
+
+    let requestData = {
+      ...rest,
+      jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
+    };
+
+    if (variables) {
+      requestData = parseWithVariables(requestData, variables);
+    }
+    
     handleUpdateUrl(urlRESTfull(data, mainUrl));
-    const response = await makeApiRequest(data);
+    
+    const response = await makeApiRequest(requestData);
     setResponseData(response);
+    
+    setIsLoading(false);
   };
 
   const { t } = useTranslation();
@@ -160,6 +186,8 @@ const RESTfullForm = () => {
           ))}
         </div>
 
+        <VariablesSection control={control} register={register} />
+
         <div className="rest__item">
           <span>{t('Body')} </span>
           <Button
@@ -189,7 +217,6 @@ const RESTfullForm = () => {
               {...register('textBody')}
               id="outlined-basic"
               multiline
-              // rows={6}
               label="Body"
               variant="outlined"
             />
@@ -205,7 +232,7 @@ const RESTfullForm = () => {
           )}
         </div>
       </form>
-      <ResponseSection responseData={responseData} />
+      <ResponseSection isLoading={isLoading} responseData={responseData} />
     </div>
   );
 };
