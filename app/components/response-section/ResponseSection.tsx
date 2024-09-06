@@ -5,6 +5,7 @@ import 'react-json-view-lite/dist/index.css';
 import { ResponseRestData } from '@/app/utils/types';
 import './ResponseSection.scss';
 import { CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const ResponseSection = ({
   responseData,
@@ -13,10 +14,11 @@ const ResponseSection = ({
   responseData: ResponseRestData | undefined;
   isLoading: boolean;
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="rest__container">
       <div className="rest__item item-title">
-        <span>Response</span>{' '}
+        <span>{t('Response')}</span>{' '}
       </div>
       {isLoading ? (
         <CircularProgress />
@@ -24,11 +26,11 @@ const ResponseSection = ({
         <>
           <div className="rest__item">
             <span>
-              Status: {responseData?.status} {responseData?.statusText}
+              {t('Status')}: {responseData?.status} {responseData?.statusText}
             </span>{' '}
           </div>
           <div className="rest__item response-body">
-            <span>Body:</span>{' '}
+            <span>{t('Body')}:</span>{' '}
             <JsonView
               data={responseData?.body || {}}
               shouldExpandNode={allExpanded}
