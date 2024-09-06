@@ -1,9 +1,9 @@
 'use client';
-
 import { Link } from '@mui/material';
 import Routers from '../../utils/routes';
 import styles from './Main.module.scss';
 import { auth } from '@/app/services/firebase';
+import Info from '../info/Info';
 
 export default function MainHome() {
   const name = auth.currentUser?.displayName;
@@ -22,6 +22,7 @@ export default function MainHome() {
           History
         </Link>
       </div>
+      <Info />
     </main>
   );
 }

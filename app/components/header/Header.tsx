@@ -19,30 +19,29 @@ export default function Header() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const user = useAuthenticated();
+  const { user, isLoading } = useAuthenticated();
 
   const [buttonText, setButtonText] = useState('Sign in');
   useEffect(() => {
     const translationKey = user ? 'Sign out' : 'Sign in';
-    setButtonText(t(translationKey));
-  }, [user, t]);
+    setButtonText(translationKey);
+  }, [user]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newLanguage = event.target.checked ? 'ru' : 'en';
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', event.target.checked ? 'en' : 'ru');
-      }
       i18n.changeLanguage(newLanguage);
       setChecked(event.target.checked);
     },
     []
   );
   const handleClick = () => {
-    if (user) {
-      logout(auth);
-    } else {
-      router.push(Routes.Authentication);
+    if (isLoading) {
+      if (user) {
+        logout(auth);
+      } else {
+        router.push(Routes.Authentication);
+      }
     }
   };
   return (
