@@ -1,9 +1,9 @@
-import { ResponseRestData, RestFormData } from './types';
+import { ResponseRestData, RestRequestData } from './types';
 
 export async function makeApiRequest(
-  formData: RestFormData
+  requestData: RestRequestData
 ): Promise<ResponseRestData | undefined> {
-  const { method, endpoint, headers, jsonBody, textBody } = formData;
+  const { method, endpoint, headers, jsonBody, textBody } = requestData;
 
   const fetchHeaders = new Headers();
   headers?.forEach(({ key, value }) => {
@@ -14,7 +14,7 @@ export async function makeApiRequest(
 
   let body = undefined;
   if (method !== 'GET' && method !== 'HEAD') {
-    body = JSON.stringify(jsonBody) ?? textBody;
+    body = jsonBody ?? textBody;
   }
 
   const requestOptions: RequestInit = {
@@ -27,11 +27,13 @@ export async function makeApiRequest(
   try {
     const response: Response = await fetch(endpoint, requestOptions);
     if (!response.ok) {
-      const data = await response.text();
       return {
         status: response.status,
         statusText: response.statusText,
-        body: { error: data },
+        body: {
+          error:
+            'The resource cannot give a correct response to your request. Please check the entered data, the selected method and try to repeat the request.',
+        },
       };
     }
     const data = await response.json();
@@ -41,6 +43,14 @@ export async function makeApiRequest(
       body: data,
     };
   } catch (error) {
-    console.error('Error making fetch request:', error);
+    const errorMessage = (error as Error)?.message ?? 'Unknown error';
+    return {
+      status: 0,
+      statusText: 'Unknown error',
+      body: {
+        error: 'Error making fetch request, try again later',
+        message: errorMessage,
+      },
+    };
   }
 }
