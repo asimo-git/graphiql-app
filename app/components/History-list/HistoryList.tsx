@@ -4,7 +4,7 @@ import { HistoryRequest, HistoryURL } from '@/app/utils/types';
 import { decodeRequest } from '@/app/utils/helpers';
 import { useEffect, useState } from 'react';
 import Routers from '../../utils/routes';
-import { Link } from '@mui/material';
+import Link from 'next/link';
 
 const HistoryList = () => {
   const [emptyArray, setEmptyArray] = useState(true);
@@ -28,14 +28,17 @@ const HistoryList = () => {
     <div className="history__container">
       {emptyArray && (
         <>
-          <h1> History Requests </h1>
+          <h1 className="history__title"> History Requests </h1>
           <ul className="history__items">
             {arrayRequest
               .sort((a, b) => Number(b.date) - Number(a.date))
               .map((request, index) => (
                 <li className="history__item" key={index}>
                   <span className="history__span">{request.method}</span>
-                  <Link href={request.urlTo} className="history__name">
+                  <Link
+                    href={{ pathname: '/RESTfull', query: request.urlTo }}
+                    className="history__link"
+                  >
                     {request.encodedUrl}
                   </Link>
                 </li>
@@ -45,13 +48,13 @@ const HistoryList = () => {
       )}
       {!emptyArray && (
         <>
-          <h1>
+          <h1 className="history__title">
             You haven&#39;t executed any requests. It&#39;s empty here. Try
           </h1>
-          <Link href={Routers.RESTfull} underline="hover" marginRight={'2rem'}>
+          <Link href={Routers.RESTfull} className="history__link">
             REST Client
           </Link>
-          <Link href={Routers.GraphiQL} underline="hover" marginRight={'2rem'}>
+          <Link href={Routers.GraphiQL} className="history__link">
             GraphiQL Client
           </Link>
         </>
