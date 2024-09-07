@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,7 +16,7 @@ import { ResponseRestData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
-import { parseWithVariables } from '@/app/utils/helpers';
+import { initialArray } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
@@ -31,7 +31,13 @@ const JsonEditor = dynamic(
 ////////
 
 const RESTfullForm = () => {
-  const mainUrl = usePathname();
+  const pathname = usePathname();
+  const getMainUrl = () => {
+    const parts = pathname.split('RESTfull');
+    return parts[0];
+  };
+  const mainUrl = `${getMainUrl()}\RESTfull`;
+
   const {
     register,
     handleSubmit,
@@ -49,6 +55,8 @@ const RESTfullForm = () => {
     ResponseRestData | undefined
   >(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [arrayUrl, setArrayUrl] = useState(initialArray());
 
   const jsonEditorElement = useMemo(
     () => (
@@ -72,24 +80,34 @@ const RESTfullForm = () => {
     window.history.pushState({}, '', newUrl);
   };
 
+  useEffect(() => {
+    localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
+  }, [arrayUrl]);
+
   const onSubmit = async (data: RestFormData) => {
     setIsLoading(true);
     const { variables, jsonBody, ...rest } = data;
 
-    let requestData = {
+    const requestData = {
       ...rest,
       jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
     };
 
     if (variables) {
-      requestData = parseWithVariables(requestData, variables);
+      // mistake connect with types
+      // requestData = parseWithVariables(requestData, variables);
     }
-    
+
+    setArrayUrl([
+      ...arrayUrl,
+      { url: urlRESTfull(data, mainUrl), date: Date.now().toString() },
+    ]);
+    console.log(data);
     handleUpdateUrl(urlRESTfull(data, mainUrl));
-    
+
     const response = await makeApiRequest(requestData);
     setResponseData(response);
-    
+
     setIsLoading(false);
   };
 

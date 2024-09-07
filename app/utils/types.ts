@@ -25,3 +25,14 @@ export type KeyValueArray = {
   key: string;
   value: string;
 }[];
+export type HistoryRequest = {
+  url: string;
+  date: string;
+};
+export type HistoryURL = {
+  urlTo: string;
+  method: string;
+  encodedUrl: string;
+  body: string;
+  date: string;
+};

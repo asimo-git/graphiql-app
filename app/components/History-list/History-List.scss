@@ -1,0 +1,16 @@
+.history__container {
+	ul {
+		list-style: none;
+	}
+}
+
+.history__items {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.history__span {
+	font-weight: 700;
+	margin-right: 16px;
+}

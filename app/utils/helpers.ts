@@ -1,4 +1,4 @@
-import { KeyValueArray, RestRequestData } from './types';
+import { HistoryRequest, KeyValueArray, RestRequestData } from './types';
 
 export const getPasswordStrengthPercentage = (password: string) => {
   let strength = 0;
@@ -58,3 +58,23 @@ export const stringToBase64 = (str: string) => {
   return base64;
 };
 
+export const decodeRequest = (obj: HistoryRequest) => {
+  let method = '';
+  let encodedUrl = '';
+  let body = '';
+  const parts = obj.url.split('/');
+  const restfulIndex = parts.indexOf('RESTfull');
+  if (restfulIndex !== -1) {
+    method = parts[restfulIndex + 1];
+    encodedUrl = atob(parts[restfulIndex + 2]);
+    body = parts[restfulIndex + 3];
+  }
+  return { method, encodedUrl, body };
+};
+
+export function initialArray() {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('arrayRequests');
+    return saved ? JSON.parse(saved) : [];
+  }
+}
