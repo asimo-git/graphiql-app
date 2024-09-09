@@ -1,40 +1,44 @@
 'use client';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { JsonEditor, JsonData } from 'json-edit-react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { GraphFormData, ResponseRestData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
-import VariablesSection from '../variables-section/VariablesSection';
+// import VariablesSection from '../variables-section/VariablesSection';
 import styles from './GraphQLForm.module.scss';
+import { Editor } from '@monaco-editor/react';
+import { useTranslation } from 'react-i18next';
+import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
 
 const GraphQLForm = () => {
-  const [jsonDataQuery, setJsonDataQuery] = useState<JsonData>({
-    key1: 'value1',
-    key2: 'value2',
-  });
+  const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [responseData, setResponseData] = useState<
-    ResponseRestData | undefined
-  >(undefined);
-
-  const handleSetJsonDataQuery = (data: JsonData) => {
-    setJsonDataQuery(data);
-  };
+  const [responseData] = useState<ResponseRestData | undefined>(undefined);
 
   const {
     register,
     control,
-    // formState: { errors },
-  } = useForm<RestFormData>();
+    handleSubmit,
+    formState: { errors },
+  } = useForm<GraphFormData>({
+    defaultValues: {
+      query: 'query {}',
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'headers',
+  });
 
-  const handleQuerySubmit = async () => {
+  const onSubmit = async (data: GraphFormData) => {
     setIsLoading(true);
     try {
+      await makeGraphQLApiRequest(data);
+      // console.log(data);
       // const response = await fetch('');
-      setResponseData(undefined);
+      // setResponseData(undefined);
     } catch (error) {
       console.error(error);
     } finally {
@@ -45,54 +49,89 @@ const GraphQLForm = () => {
   return (
     <div className={styles.graph__container}>
       <h1>GraphQL Client</h1>
-      <TextField
-        sx={{ width: '80%', marginTop: '1rem' }}
-        id="outlined-basic"
-        label="Endpoint URL"
-        variant="outlined"
-      />
-      <TextField
-        sx={{ width: '80%', marginTop: '1rem' }}
-        id="outlined-basic"
-        label="SDL URL"
-        variant="outlined"
-      />
-      <div className={styles.graph__item}>
-        <span>Headers:</span>{' '}
-        <Button
-          variant="contained"
-          className="rest__button button"
-          onClick={() => {}}
-        >
-          Add Header Button
-        </Button>
-      </div>
-      <div className={styles.graph__header_key}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          sx={{ width: '45%', marginRight: '10%' }}
+          {...register('endpoint', { required: true })}
+          sx={{ width: '80%', marginTop: '1rem' }}
           id="outlined-basic"
-          label="Header Key"
-          variant="outlined"
-        />{' '}
-        <TextField
-          sx={{ width: '45%' }}
-          id="outlined-basic"
-          label="Header Value"
+          label="Endpoint URL"
           variant="outlined"
         />
-      </div>
-      <h2>Query:</h2>
-      <JsonEditor data={jsonDataQuery} setData={handleSetJsonDataQuery} />
-      <h2>Variables:</h2>
-      <VariablesSection control={control} register={register} />
-      <Button
-        variant="contained"
-        className="rest__button button"
-        onClick={handleQuerySubmit}
-        disabled={isLoading}
-      >
-        {isLoading ? 'Loading...' : 'Send Request'}
-      </Button>
+        <TextField
+          {...register('sdlEndpoint')}
+          sx={{ width: '80%', marginTop: '1rem' }}
+          id="outlined-basic"
+          label="SDL URL"
+          variant="outlined"
+        />
+        <div className={styles.graph__item}>
+          <span>Headers:</span>{' '}
+          <Button
+            variant="contained"
+            onClick={() => append({ key: '', value: '' })}
+          >
+            {t('Add Header')}
+          </Button>
+        </div>
+
+        <div className={styles.graph__header_key}>
+          {fields.map((field, index) => (
+            <div key={field.id} className="rest__item fullwidth">
+              <TextField
+                {...register(`headers.${index}.key`)}
+                sx={{ width: '40%', marginRight: '2%', height: '100%' }}
+                label="Header Key"
+                variant="outlined"
+                error={!!errors.headers?.[index]?.key}
+                helperText={
+                  errors.headers?.[index]?.key ? 'Key is required' : ''
+                }
+              />
+              <TextField
+                {...register(`headers.${index}.value`)}
+                sx={{ width: '40%', marginRight: '2%', height: '100%' }}
+                label="Header Value"
+                variant="outlined"
+                error={!!errors.headers?.[index]?.value}
+                helperText={
+                  errors.headers?.[index]?.value ? 'Value is required' : ''
+                }
+              />
+              <Button
+                variant="contained"
+                onClick={() => remove(index)}
+                sx={{ width: '16%' }}
+              >
+                {t('Remove')}
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        <h2>Query:</h2>
+        <Controller
+          name="query"
+          control={control}
+          render={({ field }) => (
+            <Editor
+              height="300px"
+              defaultLanguage="graphql"
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
+            />
+          )}
+        />
+        <h2>Variables:</h2>
+        {/* <VariablesSection control={control} register={register} /> */}
+        <Button
+          type="submit"
+          variant="contained"
+          className="rest__button button"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Send Request'}
+        </Button>
+      </form>
       <ResponseSection isLoading={isLoading} responseData={responseData} />
     </div>
   );

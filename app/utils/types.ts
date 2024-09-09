@@ -25,3 +25,11 @@ export type KeyValueArray = {
   key: string;
   value: string;
 }[];
+
+export type GraphFormData = {
+  endpoint: string;
+  sdlEndpoint?: string;
+  query: string;
+  variables?: KeyValueArray;
+  headers: KeyValueArray;
+};

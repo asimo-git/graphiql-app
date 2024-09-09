@@ -1,4 +1,4 @@
-import { ResponseRestData, RestRequestData } from './types';
+import { GraphFormData, ResponseRestData, RestRequestData } from './types';
 
 export async function makeApiRequest(
   requestData: RestRequestData
@@ -52,5 +52,36 @@ export async function makeApiRequest(
         message: errorMessage,
       },
     };
+  }
+}
+
+export async function makeGraphQLApiRequest({
+  query,
+  variables = {},
+  endpoint = '/graphql',
+  headers,
+}: GraphFormData): Promise<void> {
+  try {
+    const fetchHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    headers.forEach(({ key, value }) => {
+      fetchHeaders[key] = value;
+    });
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: fetchHeaders,
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    });
+
+    const result = await response.json();
+    console.log(response.status, result);
+  } catch {
+    throw new Error(`GraphQL request failed`);
   }
 }
