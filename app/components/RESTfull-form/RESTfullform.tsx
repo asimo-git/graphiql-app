@@ -12,7 +12,7 @@ import 'react-json-view-lite/dist/index.css';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
@@ -45,9 +45,9 @@ const RESTfullForm = () => {
   });
 
   const [chooseField, setchooseField] = useState(true);
-  const [responseData, setResponseData] = useState<
-    ResponseRestData | undefined
-  >(undefined);
+  const [responseData, setResponseData] = useState<ResponseData | undefined>(
+    undefined
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const jsonEditorElement = useMemo(

@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { GraphFormData, ResponseRestData } from '@/app/utils/types';
+import { GraphQLFormData, ResponseData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
 // import VariablesSection from '../variables-section/VariablesSection';
 import styles from './GraphQLForm.module.scss';
@@ -15,14 +15,16 @@ const GraphQLForm = () => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [responseData] = useState<ResponseRestData | undefined>(undefined);
+  const [responseData, setResponseData] = useState<ResponseData | undefined>(
+    undefined
+  );
 
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<GraphFormData>({
+  } = useForm<GraphQLFormData>({
     defaultValues: {
       query: 'query {}',
     },
@@ -32,13 +34,11 @@ const GraphQLForm = () => {
     name: 'headers',
   });
 
-  const onSubmit = async (data: GraphFormData) => {
+  const onSubmit = async (data: GraphQLFormData) => {
     setIsLoading(true);
     try {
-      await makeGraphQLApiRequest(data);
-      // console.log(data);
-      // const response = await fetch('');
-      // setResponseData(undefined);
+      const response = await makeGraphQLApiRequest(data);
+      setResponseData(response);
     } catch (error) {
       console.error(error);
     } finally {

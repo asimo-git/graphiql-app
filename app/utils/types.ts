@@ -15,10 +15,10 @@ export type RestRequestData = {
   textBody?: string;
 };
 
-export type ResponseRestData = {
+export type ResponseData = {
   status: number;
   statusText: string;
-  body: Record<string, string>;
+  body: unknown;
 };
 
 export type KeyValueArray = {
@@ -26,7 +26,7 @@ export type KeyValueArray = {
   value: string;
 }[];
 
-export type GraphFormData = {
+export type GraphQLFormData = {
   endpoint: string;
   sdlEndpoint?: string;
   query: string;
