@@ -11,7 +11,7 @@ import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
 import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
 
-const GraphQLForm = () => {
+const GraphiQLForm = () => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,13 +48,13 @@ const GraphQLForm = () => {
 
   return (
     <div className={styles.graph__container}>
-      <h1>GraphQL Client</h1>
+      <h1>{t('GraphiQL Client')}</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           {...register('endpoint', { required: true })}
           sx={{ width: '80%', marginTop: '1rem' }}
           id="outlined-basic"
-          label="Endpoint URL"
+          label={t('Endpoint URL')}
           variant="outlined"
         />
         <TextField
@@ -65,7 +65,7 @@ const GraphQLForm = () => {
           variant="outlined"
         />
         <div className={styles.graph__item}>
-          <span>Headers:</span>{' '}
+          <span>{t('Headers')}:</span>{' '}
           <Button
             variant="contained"
             onClick={() => append({ key: '', value: '' })}
@@ -80,7 +80,7 @@ const GraphQLForm = () => {
               <TextField
                 {...register(`headers.${index}.key`)}
                 sx={{ width: '40%', marginRight: '2%', height: '100%' }}
-                label="Header Key"
+                label={t('Header Key')}
                 variant="outlined"
                 error={!!errors.headers?.[index]?.key}
                 helperText={
@@ -90,7 +90,7 @@ const GraphQLForm = () => {
               <TextField
                 {...register(`headers.${index}.value`)}
                 sx={{ width: '40%', marginRight: '2%', height: '100%' }}
-                label="Header Value"
+                label={t('Header Value')}
                 variant="outlined"
                 error={!!errors.headers?.[index]?.value}
                 helperText={
@@ -108,7 +108,7 @@ const GraphQLForm = () => {
           ))}
         </div>
 
-        <h2>Query:</h2>
+        <h2>{t('Query')}:</h2>
         <Controller
           name="query"
           control={control}
@@ -121,7 +121,7 @@ const GraphQLForm = () => {
             />
           )}
         />
-        <h2>Variables:</h2>
+        <h2>{t('Variables')}:</h2>
         {/* <VariablesSection control={control} register={register} /> */}
         <Button
           type="submit"
@@ -129,7 +129,7 @@ const GraphQLForm = () => {
           className="rest__button button"
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Send Request'}
+          {isLoading ? 'Loading...' : t('Submit')}
         </Button>
       </form>
       <ResponseSection isLoading={isLoading} responseData={responseData} />
@@ -137,4 +137,4 @@ const GraphQLForm = () => {
   );
 };
 
-export default GraphQLForm;
+export default GraphiQLForm;
