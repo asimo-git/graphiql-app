@@ -1,8 +1,20 @@
-import { ResponseRestData, RestRequestData } from './types';
+import { GraphQLFormData, ResponseData, RestRequestData } from './types';
+
+function handleError(error: unknown): ResponseData {
+  const errorMessage = (error as Error)?.message ?? 'Unknown error';
+  return {
+    status: 0,
+    statusText: 'Unknown error',
+    body: {
+      error: 'Error making fetch request, try again later',
+      message: errorMessage,
+    },
+  };
+}
 
 export async function makeApiRequest(
   requestData: RestRequestData
-): Promise<ResponseRestData | undefined> {
+): Promise<ResponseData | undefined> {
   const { method, endpoint, headers, jsonBody, textBody } = requestData;
 
   const fetchHeaders = new Headers();
@@ -43,14 +55,41 @@ export async function makeApiRequest(
       body: data,
     };
   } catch (error) {
-    const errorMessage = (error as Error)?.message ?? 'Unknown error';
-    return {
-      status: 0,
-      statusText: 'Unknown error',
-      body: {
-        error: 'Error making fetch request, try again later',
-        message: errorMessage,
-      },
+    return handleError(error);
+  }
+}
+
+export async function makeGraphQLApiRequest({
+  query,
+  variables,
+  endpoint,
+  headers,
+}: GraphQLFormData): Promise<ResponseData> {
+  try {
+    const fetchHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
     };
+
+    headers.forEach(({ key, value }) => {
+      fetchHeaders[key] = value;
+    });
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: fetchHeaders,
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    });
+
+    const result = await response.json();
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      body: result,
+    };
+  } catch (error) {
+    return handleError(error);
   }
 }
