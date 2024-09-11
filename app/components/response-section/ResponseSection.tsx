@@ -2,7 +2,7 @@
 import React from 'react';
 import { JsonView, allExpanded, defaultStyles } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
-import { ResponseRestData } from '@/app/utils/types';
+import { ResponseData } from '@/app/utils/types';
 import './ResponseSection.scss';
 import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ const ResponseSection = ({
   responseData,
   isLoading,
 }: {
-  responseData: ResponseRestData | undefined;
+  responseData: ResponseData | undefined;
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();

@@ -12,11 +12,11 @@ import 'react-json-view-lite/dist/index.css';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
-import { parseWithVariables } from '@/app/utils/helpers';
+// import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
@@ -45,9 +45,9 @@ const RESTfullForm = () => {
   });
 
   const [chooseField, setchooseField] = useState(true);
-  const [responseData, setResponseData] = useState<
-    ResponseRestData | undefined
-  >(undefined);
+  const [responseData, setResponseData] = useState<ResponseData | undefined>(
+    undefined
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const jsonEditorElement = useMemo(
@@ -76,13 +76,13 @@ const RESTfullForm = () => {
     setIsLoading(true);
     const { variables, jsonBody, ...rest } = data;
 
-    let requestData = {
+    const requestData = {
       ...rest,
       jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
     };
 
     if (variables) {
-      requestData = parseWithVariables(requestData, variables);
+      // requestData = parseWithVariables(requestData, variables);
     }
 
     handleUpdateUrl(urlRESTfull(data, mainUrl));

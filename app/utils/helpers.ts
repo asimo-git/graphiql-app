@@ -57,4 +57,3 @@ export const stringToBase64 = (str: string) => {
   const base64 = btoa(String.fromCharCode(...bytes));
   return base64;
 };
-
