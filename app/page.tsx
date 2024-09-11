@@ -1,6 +1,4 @@
 'use client';
-import Header from './components/header/Header';
-import Footer from './components/footer/Footer';
 import MainWelcome from './components/main/MainWelcome';
 import MainHome from './components/main/MainHome';
 import { useAuthenticated } from './utils/Auth';
@@ -10,7 +8,6 @@ export default function Welcome() {
   const { user, isLoading } = useAuthenticated();
   return (
     <>
-      <Header />
       {isLoading ? (
         user ? (
           <MainHome />
@@ -20,7 +17,6 @@ export default function Welcome() {
       ) : (
         <main className={styles.main}></main>
       )}
-      <Footer />
     </>
   );
 }
