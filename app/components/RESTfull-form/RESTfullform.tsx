@@ -12,11 +12,12 @@ import 'react-json-view-lite/dist/index.css';
 import { useState } from 'react';
 import { METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { ResponseRestData, RestFormData } from '@/app/utils/types';
+import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
 import { initialArray } from '@/app/utils/helpers';
+// import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { parseUrlToFormData, urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
@@ -52,9 +53,9 @@ const RESTfullForm = () => {
   });
 
   const [chooseField, setchooseField] = useState(true);
-  const [responseData, setResponseData] = useState<
-    ResponseRestData | undefined
-  >(undefined);
+  const [responseData, setResponseData] = useState<ResponseData | undefined>(
+    undefined
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [arrayUrl, setArrayUrl] = useState(initialArray());
@@ -103,8 +104,8 @@ const RESTfullForm = () => {
       ...arrayUrl,
       { url: urlRESTfull(data, mainUrl), date: Date.now().toString() },
     ]);
-    handleUpdateUrl(urlRESTfull(data, mainUrl));
 
+    handleUpdateUrl(urlRESTfull(data, mainUrl));
     const response = await makeApiRequest(requestData);
     setResponseData(response);
 

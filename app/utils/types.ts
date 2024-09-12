@@ -15,16 +15,17 @@ export type RestRequestData = {
   textBody?: string;
 };
 
-export type ResponseRestData = {
+export type ResponseData = {
   status: number;
   statusText: string;
-  body: Record<string, string>;
+  body: unknown;
 };
 
 export type KeyValueArray = {
   key: string;
   value: string;
 }[];
+
 export type HistoryRequest = {
   url: string;
   date: string;
@@ -35,4 +36,12 @@ export type HistoryURL = {
   encodedUrl: string;
   body: string;
   date: string;
+};
+
+export type GraphQLFormData = {
+  endpoint: string;
+  sdlEndpoint?: string;
+  query: string;
+  variables?: KeyValueArray;
+  headers: KeyValueArray;
 };
