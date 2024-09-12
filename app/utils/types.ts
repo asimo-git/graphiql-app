@@ -30,6 +30,6 @@ export type GraphQLFormData = {
   endpoint: string;
   sdlEndpoint?: string;
   query: string;
-  variables?: KeyValueArray;
+  variables: string;
   headers: KeyValueArray;
 };

@@ -79,7 +79,7 @@ export async function makeGraphQLApiRequest({
       headers: fetchHeaders,
       body: JSON.stringify({
         query,
-        variables,
+        variables: variables ? JSON.parse(variables) : {},
       }),
     });
 

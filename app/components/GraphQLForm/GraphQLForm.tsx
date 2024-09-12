@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { GraphQLFormData, ResponseData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
-// import VariablesSection from '../variables-section/VariablesSection';
 import styles from './GraphQLForm.module.scss';
 import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
@@ -56,6 +55,8 @@ const GraphiQLForm = () => {
           id="outlined-basic"
           label={t('Endpoint URL')}
           variant="outlined"
+          error={!!errors.endpoint}
+          helperText={errors.endpoint ? 'Endpoint is required' : ''}
         />
         <TextField
           {...register('sdlEndpoint')}
@@ -112,17 +113,36 @@ const GraphiQLForm = () => {
         <Controller
           name="query"
           control={control}
+          rules={{ required: 'Query is required' }}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Editor
+                height="300px"
+                defaultLanguage="graphql"
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+              />
+              {error && (
+                <div style={{ color: 'red', marginTop: '8px' }}>
+                  {error.message}
+                </div>
+              )}
+            </>
+          )}
+        />
+        <h2>{t('Variables')}:</h2>
+        <Controller
+          name="variables"
+          control={control}
           render={({ field }) => (
             <Editor
-              height="300px"
-              defaultLanguage="graphql"
+              height="100px"
+              defaultLanguage="json"
               value={field.value}
               onChange={(value) => field.onChange(value)}
             />
           )}
         />
-        <h2>{t('Variables')}:</h2>
-        {/* <VariablesSection control={control} register={register} /> */}
         <Button
           type="submit"
           variant="contained"
