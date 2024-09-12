@@ -1,6 +1,4 @@
 'use client';
-import Header from '../components/header/Header';
-import Footer from '../components/footer/Footer';
 import AuthenticationForm from '../components/authentication-form/AuthenticationForm';
 import Routes from '../utils/routes';
 import { useAuthenticated } from '../utils/Auth';
@@ -17,12 +15,10 @@ export default function AuthenticationPage() {
       {isLoading ? (
         !user ? (
           <>
-            <Header />
             <main className="main">
               <h2>{t('Sign Up')}</h2>
               <AuthenticationForm formType="reg" />
             </main>
-            <Footer />
           </>
         ) : (
           router.push(Routes.Home)
