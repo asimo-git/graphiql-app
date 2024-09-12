@@ -16,19 +16,11 @@ import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
-// import { parseWithVariables } from '@/app/utils/helpers';
+import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
-
-// dynamic import to fix the error ReferenceError: document is not defined
-// at E (./node_modules/json-edit-react/build/index.esm.js:27:14077)
-import dynamic from 'next/dynamic';
-const JsonEditor = dynamic(
-  () => import('json-edit-react').then((mod) => mod.JsonEditor),
-  { ssr: false }
-);
-////////
+import { Editor } from '@monaco-editor/react';
 
 const RESTfullForm = () => {
   const mainUrl = usePathname();
@@ -56,10 +48,12 @@ const RESTfullForm = () => {
         <Controller
           control={control}
           name="jsonBody"
-          render={({ field: { onChange, value } }) => (
-            <JsonEditor
-              data={value || {}}
-              setData={(newValue) => onChange(newValue)}
+          render={({ field }) => (
+            <Editor
+              height="300px"
+              defaultLanguage="json"
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
             />
           )}
         />
@@ -74,15 +68,12 @@ const RESTfullForm = () => {
 
   const onSubmit = async (data: RestFormData) => {
     setIsLoading(true);
-    const { variables, jsonBody, ...rest } = data;
+    const { variables, ...rest } = data;
 
-    const requestData = {
-      ...rest,
-      jsonBody: jsonBody ? JSON.stringify(jsonBody) : undefined,
-    };
+    let requestData = rest;
 
     if (variables) {
-      // requestData = parseWithVariables(requestData, variables);
+      requestData = parseWithVariables(requestData, variables);
     }
 
     handleUpdateUrl(urlRESTfull(data, mainUrl));
@@ -220,15 +211,6 @@ const RESTfullForm = () => {
               label="Body"
               variant="outlined"
             />
-          )}
-          {chooseField ? (
-            <div className="rest__point">
-              {t(
-                'for work with item json: the first icon copy to clipboard, the second edit, the third delete'
-              )}
-            </div>
-          ) : (
-            ''
           )}
         </div>
       </form>

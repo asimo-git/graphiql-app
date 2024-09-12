@@ -21,7 +21,7 @@ const VariablesSection = ({
   return (
     <>
       <div className="rest__item">
-        <span>{t('Variables:')}</span>{' '}
+        <span>{t('Variables')}</span>
         <Button
           variant="contained"
           onClick={() => append({ key: '', value: '' })}

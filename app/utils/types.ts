@@ -2,7 +2,7 @@ export type RestFormData = {
   method: string;
   endpoint: string;
   headers: KeyValueArray;
-  jsonBody?: Record<string, string>;
+  jsonBody?: string;
   textBody?: string;
   variables?: KeyValueArray;
 };
@@ -10,7 +10,7 @@ export type RestFormData = {
 export type RestRequestData = {
   method: string;
   endpoint: string;
-  headers?: KeyValueArray;
+  headers: KeyValueArray;
   jsonBody?: string;
   textBody?: string;
 };
