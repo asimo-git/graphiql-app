@@ -10,7 +10,7 @@ import { Button } from '@mui/material';
 import './RESTfull.scss';
 import 'react-json-view-lite/dist/index.css';
 import { useState } from 'react';
-import { METHODS } from '@/app/utils/constants';
+import { FIELD_NAMES, METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
@@ -19,7 +19,11 @@ import VariablesSection from '../variables-section/VariablesSection';
 import { initialArray } from '@/app/utils/helpers';
 // import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
-import { parseUrlToFormData, urlRESTfull } from '@/app/utils/url-restfull';
+import {
+  parseUrlToFormData,
+  updateURL,
+  // urlRESTfull,
+} from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
 
 // dynamic import to fix the error ReferenceError: document is not defined
@@ -34,16 +38,19 @@ const JsonEditor = dynamic(
 const RESTfullForm = () => {
   const pathname = usePathname();
   const savedFormData = useMemo(() => parseUrlToFormData(pathname), []);
-  const getMainUrl = () => {
-    const parts = pathname.split('RESTfull');
-    return parts[0];
-  };
-  const mainUrl = `${getMainUrl()}\RESTfull`;
+  // const getMainUrl = () => {
+  //   const parts = pathname.split('RESTfull');
+  //   return parts[0];
+  // };
+  // const mainUrl = `${getMainUrl()}\RESTfull`;
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<RestFormData>();
 
@@ -78,9 +85,9 @@ const RESTfullForm = () => {
     [control]
   );
 
-  const handleUpdateUrl = (newUrl: string) => {
-    window.history.pushState({}, '', newUrl);
-  };
+  // const handleUpdateUrl = (newUrl: string) => {
+  //   window.history.pushState({}, '', newUrl);
+  // };
 
   useEffect(() => {
     localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
@@ -99,13 +106,10 @@ const RESTfullForm = () => {
       // mistake connect with types
       // requestData = parseWithVariables(requestData, variables);
     }
+    console.log(pathname);
+    setArrayUrl([...arrayUrl, { url: pathname, date: Date.now().toString() }]);
 
-    setArrayUrl([
-      ...arrayUrl,
-      { url: urlRESTfull(data, mainUrl), date: Date.now().toString() },
-    ]);
-
-    handleUpdateUrl(urlRESTfull(data, mainUrl));
+    // handleUpdateUrl(urlRESTfull(data, mainUrl));
     const response = await makeApiRequest(requestData);
     setResponseData(response);
 
@@ -129,6 +133,9 @@ const RESTfullForm = () => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 defaultValue={savedFormData?.method || METHODS.GET}
+                onChange={(event) => {
+                  updateURL(FIELD_NAMES.METHOD, event.target.value);
+                }}
                 label="Method"
               >
                 <MenuItem value={METHODS.GET}>GET</MenuItem>
@@ -149,6 +156,9 @@ const RESTfullForm = () => {
               defaultValue={savedFormData?.endpoint || ''}
               error={!!errors.endpoint}
               helperText={errors.endpoint ? 'Endpoint is required' : ''}
+              onBlur={(event) =>
+                updateURL(FIELD_NAMES.ENDPOINT, event.target.value)
+              }
             />
 
             <Button
@@ -184,6 +194,13 @@ const RESTfullForm = () => {
                 helperText={
                   errors.headers?.[index]?.key ? 'Key is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.key`, event.target.value);
+                  trigger(`headers.${index}.key`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <TextField
                 {...register(`headers.${index}.value`)}
@@ -194,10 +211,20 @@ const RESTfullForm = () => {
                 helperText={
                   errors.headers?.[index]?.value ? 'Value is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.value`, event.target.value);
+                  trigger(`headers.${index}.value`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <Button
                 variant="contained"
-                onClick={() => remove(index)}
+                onClick={() => {
+                  remove(index);
+                  updateURL(FIELD_NAMES.HEADERS, fields);
+                }}
                 sx={{ width: '16%' }}
               >
                 {t('Remove')}
@@ -239,6 +266,9 @@ const RESTfullForm = () => {
               multiline
               label="Body"
               variant="outlined"
+              onBlur={(event) =>
+                updateURL(FIELD_NAMES.BODY, event.target.value)
+              }
             />
           )}
           {chooseField ? (

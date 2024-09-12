@@ -1,6 +1,4 @@
 'use client';
-import Header from '../components/header/Header';
-import Footer from '../components/footer/Footer';
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '../utils/Auth';
 import Routes from '../utils/routes';
@@ -18,11 +16,9 @@ export default function HistoryPage() {
       {isLoading ? (
         user ? (
           <>
-            <Header />
             <main className="main">
               <HistoryList />
             </main>
-            <Footer />
           </>
         ) : (
           router.push(Routes.Home)

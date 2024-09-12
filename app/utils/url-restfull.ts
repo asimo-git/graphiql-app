@@ -1,5 +1,6 @@
+import { FIELD_NAMES } from './constants';
 import { stringToBase64 } from './helpers';
-import { RestFormData } from './types';
+import { FieldName, KeyValueObj, RestFormData } from './types';
 
 export function urlRESTfull(data: RestFormData, mainUrl: string): string {
   let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
@@ -55,7 +56,7 @@ export function parseUrlToFormData(url: string): RestFormData | null {
     urlObj.searchParams.forEach((value, key) => {
       restFormData.headers.push({
         key: key,
-        value: decodeURIComponent(atob(value)),
+        value: value,
       });
     });
     return restFormData;
@@ -63,4 +64,51 @@ export function parseUrlToFormData(url: string): RestFormData | null {
     console.error('Parse URL error:', error);
     return null;
   }
+}
+
+export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
+  const baseUrl = window.location.origin;
+  const pathSegments = window.location.pathname
+    .split('/')
+    .filter((segment) => segment.length > 0);
+  console.log('do', value);
+
+  if (!pathSegments[1]) {
+    pathSegments[1] = 'GET';
+  }
+
+  switch (fieldName) {
+    case FIELD_NAMES.METHOD:
+      pathSegments[1] = value as string;
+      break;
+    case FIELD_NAMES.ENDPOINT:
+      pathSegments[2] = stringToBase64(value as string);
+      break;
+    case FIELD_NAMES.BODY:
+      pathSegments[3] = stringToBase64(value as string);
+      break;
+    case FIELD_NAMES.HEADERS:
+      const searchParams = new URLSearchParams();
+      if (typeof value !== 'string') {
+        // if (value[0].key === '') {
+
+        // }
+        value.forEach((field) => {
+          if (field.key && field.value) {
+            searchParams.set(field.key, field.value);
+          }
+        });
+        window.history.pushState(
+          {},
+          '',
+          `${baseUrl}/${pathSegments.join('/')}?${searchParams.toString()}`
+        );
+        return;
+      }
+    default:
+      break;
+  }
+
+  window.history.pushState({}, '', `${baseUrl}/${pathSegments.join('/')}`);
+  console.log('posle', window.location);
 }
