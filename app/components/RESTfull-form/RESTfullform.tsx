@@ -18,7 +18,7 @@ import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
 import { initialArray } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
-import { urlRESTfull } from '@/app/utils/url-restfull';
+import { parseUrlToFormData, urlRESTfull } from '@/app/utils/url-restfull';
 import { usePathname } from 'next/navigation';
 
 // dynamic import to fix the error ReferenceError: document is not defined
@@ -32,6 +32,7 @@ const JsonEditor = dynamic(
 
 const RESTfullForm = () => {
   const pathname = usePathname();
+  const savedFormData = useMemo(() => parseUrlToFormData(pathname), []);
   const getMainUrl = () => {
     const parts = pathname.split('RESTfull');
     return parts[0];
@@ -102,7 +103,6 @@ const RESTfullForm = () => {
       ...arrayUrl,
       { url: urlRESTfull(data, mainUrl), date: Date.now().toString() },
     ]);
-    console.log(data);
     handleUpdateUrl(urlRESTfull(data, mainUrl));
 
     const response = await makeApiRequest(requestData);
@@ -127,7 +127,7 @@ const RESTfullForm = () => {
                 {...register('method')}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                defaultValue={METHODS.GET}
+                defaultValue={savedFormData?.method || METHODS.GET}
                 label="Method"
               >
                 <MenuItem value={METHODS.GET}>GET</MenuItem>
@@ -145,6 +145,7 @@ const RESTfullForm = () => {
               id="outlined-basic"
               label={t('Endpoint URL')}
               variant="outlined"
+              defaultValue={savedFormData?.endpoint || ''}
               error={!!errors.endpoint}
               helperText={errors.endpoint ? 'Endpoint is required' : ''}
             />
