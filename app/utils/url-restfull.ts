@@ -1,30 +1,31 @@
 import { FIELD_NAMES } from './constants';
 import { stringToBase64 } from './helpers';
+import Routes from './routes';
 import { FieldName, KeyValueObj, RestFormData } from './types';
 
-export function urlRESTfull(data: RestFormData, mainUrl: string): string {
-  let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
+// export function urlRESTfull(data: RestFormData, mainUrl: string): string {
+//   let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
 
-  if (data.jsonBody) {
-    needUrl += `/${stringToBase64(JSON.stringify(data.jsonBody))}`;
-  } else if (data.textBody) {
-    needUrl += `/${stringToBase64(data.textBody)}`;
-  }
+//   if (data.jsonBody) {
+//     needUrl += `/${stringToBase64(JSON.stringify(data.jsonBody))}`;
+//   } else if (data.textBody) {
+//     needUrl += `/${stringToBase64(data.textBody)}`;
+//   }
 
-  const queryParams = new URLSearchParams();
+//   const queryParams = new URLSearchParams();
 
-  if (data.headers.length > 0) {
-    data.headers.forEach((header) => {
-      queryParams.append(header.key, stringToBase64(header.value));
-    });
-  }
+//   if (data.headers.length > 0) {
+//     data.headers.forEach((header) => {
+//       queryParams.append(header.key, stringToBase64(header.value));
+//     });
+//   }
 
-  if (queryParams.toString()) {
-    needUrl += `?${queryParams.toString()}`;
-  }
+//   if (queryParams.toString()) {
+//     needUrl += `?${queryParams.toString()}`;
+//   }
 
-  return needUrl;
-}
+//   return needUrl;
+// }
 
 export function parseUrlToFormData(url: string): RestFormData | null {
   try {
@@ -74,7 +75,8 @@ export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
   console.log('do', value);
 
   if (!pathSegments[1]) {
-    pathSegments[1] = 'GET';
+    const method = pathSegments[0] === Routes.RESTfull ? 'GET' : 'GRAPHQL';
+    pathSegments[1] = method;
   }
 
   switch (fieldName) {
@@ -90,9 +92,6 @@ export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
     case FIELD_NAMES.HEADERS:
       const searchParams = new URLSearchParams();
       if (typeof value !== 'string') {
-        // if (value[0].key === '') {
-
-        // }
         value.forEach((field) => {
           if (field.key && field.value) {
             searchParams.set(field.key, field.value);
