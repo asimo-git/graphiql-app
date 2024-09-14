@@ -2,8 +2,6 @@ import { stringToBase64 } from './helpers';
 import { RestFormData } from './types';
 
 export function urlRESTfull(data: RestFormData, mainUrl: string): string {
-  // const mainUrl = window.location.href;
-
   let needUrl = `${mainUrl}/${data.method}/${stringToBase64(data.endpoint)}`;
 
   if (data.jsonBody) {
