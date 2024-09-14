@@ -16,10 +16,10 @@ import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
-import { getDataFromLocalStorage, initialArray } from '@/app/utils/helpers';
+import { getAndRemoveDataFromLS, initialArray } from '@/app/utils/helpers';
 import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
-import { updateURL } from '@/app/utils/url-restfull';
+import { updateURL } from '@/app/utils/update-url';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Editor } from '@monaco-editor/react';
 
@@ -27,9 +27,7 @@ const RESTfullForm = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const savedFormData: RestFormData | null = useMemo(() => {
-    const data = getDataFromLocalStorage('currentFormData');
-    localStorage.removeItem('currentFormData');
-    return data;
+    return getAndRemoveDataFromLS('currentFormData');
   }, []);
 
   const {

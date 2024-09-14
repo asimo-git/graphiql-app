@@ -17,12 +17,6 @@ const HistoryList = () => {
     const storedRequests: HistoryRequest[] =
       JSON.parse(localStorage.getItem('arrayRequests') as string) || [];
 
-    // const arrayRequest: HistoryURL[] = storedRequests.map((request) => ({
-    //   urlTo: request.url,
-    //   ...decodeRequest(request),
-    //   date: request.date,
-    // }));
-
     if (storedRequests.length > 0) {
       setIsEmpty(false);
       storedRequests.sort((a, b) => Number(b.date) - Number(a.date));

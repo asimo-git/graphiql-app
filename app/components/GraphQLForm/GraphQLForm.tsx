@@ -1,7 +1,7 @@
 'use client';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { GraphQLFormData, ResponseData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
@@ -9,17 +9,16 @@ import styles from './GraphQLForm.module.scss';
 import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
 import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
-import { getDataFromLocalStorage, initialArray } from '@/app/utils/helpers';
-import { usePathname } from 'next/navigation';
-import { updateURL } from '@/app/utils/url-restfull';
+import { getAndRemoveDataFromLS, initialArray } from '@/app/utils/helpers';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { updateURL } from '@/app/utils/update-url';
 import { FIELD_NAMES } from '@/app/utils/constants';
 
 const GraphiQLForm = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const savedFormData: GraphQLFormData | null = useMemo(() => {
-    const data = getDataFromLocalStorage('currentFormData');
-    localStorage.removeItem('currentFormData');
-    return data;
+    return getAndRemoveDataFromLS('currentFormData');
   }, []);
   const { t } = useTranslation();
 
@@ -29,14 +28,23 @@ const GraphiQLForm = () => {
   );
   const [arrayUrl, setArrayUrl] = useState(initialArray());
 
+  useEffect(() => {
+    localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
+  }, [arrayUrl]);
+
   const {
     register,
-    control,
     handleSubmit,
+    control,
+    setValue,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<GraphQLFormData>({
     defaultValues: {
-      query: 'query {}',
+      headers: savedFormData?.headers || [],
+      query: savedFormData?.query || 'query {}',
+      variables: savedFormData?.variables || '',
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -51,7 +59,11 @@ const GraphiQLForm = () => {
       setResponseData(response);
       setArrayUrl([
         ...arrayUrl,
-        { url: pathname, date: Date.now().toString() },
+        {
+          url: `${pathname}?${searchParams.toString()}`,
+          date: Date.now().toString(),
+          formData: data,
+        },
       ]);
     } catch (error) {
       console.error(error);
@@ -81,6 +93,7 @@ const GraphiQLForm = () => {
           {...register('sdlEndpoint')}
           sx={{ width: '80%', marginTop: '1rem' }}
           id="outlined-basic"
+          defaultValue={savedFormData?.sdlEndpoint || ''}
           label="SDL URL"
           variant="outlined"
         />
@@ -106,6 +119,13 @@ const GraphiQLForm = () => {
                 helperText={
                   errors.headers?.[index]?.key ? 'Key is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.key`, event.target.value);
+                  trigger(`headers.${index}.key`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <TextField
                 {...register(`headers.${index}.value`)}
@@ -116,6 +136,13 @@ const GraphiQLForm = () => {
                 helperText={
                   errors.headers?.[index]?.value ? 'Value is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.value`, event.target.value);
+                  trigger(`headers.${index}.value`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <Button
                 variant="contained"

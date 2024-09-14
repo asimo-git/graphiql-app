@@ -79,10 +79,14 @@ export function initialArray() {
   }
 }
 
-export function getDataFromLocalStorage(key: string) {
+export function getAndRemoveDataFromLS(key: string) {
   if (typeof window !== 'undefined') {
     const stringData = localStorage.getItem(key);
-    if (stringData) return JSON.parse(stringData);
+    if (stringData) {
+      const data = JSON.parse(stringData);
+      localStorage.removeItem(key);
+      return data;
+    }
   }
   return null;
 }
