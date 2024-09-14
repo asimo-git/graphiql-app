@@ -45,39 +45,46 @@ export default function Header() {
     }
   };
   return (
-    <header className="header">
-      <div className="header__container box">
-        <div className="header__logo">
-          <Link href="./" />{' '}
-          <Image width={50} height={50} alt="logo" src={'/logo.jpg'} />
-          <span>{t('Soft')}</span>
-        </div>
-        <div className="header__switch">
-          {' '}
-          {checked ? 'EN' : 'RU'}
-          <Switch
-            checked={checked}
-            onChange={handleChange}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-        <Button
-          variant="contained"
-          className="header__button button"
-          onClick={handleClick}
-        >
-          {t(buttonText)}
-        </Button>
-        <Button
-          variant="contained"
-          href={Routes.Registration}
-          className={
-            user ? 'header__button button unvisible' : ' header__button button'
-          }
-        >
-          {t('Sign Up')}
-        </Button>
-      </div>
-    </header>
+    <>
+      {' '}
+      {isLoading && (
+        <header className="header">
+          <div className="header__container box">
+            <div className="header__logo">
+              <Link href="./" />{' '}
+              <Image width={50} height={50} alt="logo" src={'/logo.jpg'} />
+              <span>{t('Soft')}</span>
+            </div>
+            <div className="header__switch">
+              {' '}
+              {checked ? 'EN' : 'RU'}
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </div>
+            <Button
+              variant="contained"
+              className="header__button button"
+              onClick={handleClick}
+            >
+              {t(buttonText)}
+            </Button>
+            <Button
+              variant="contained"
+              href={Routes.Registration}
+              className={
+                user
+                  ? 'header__button button unvisible'
+                  : ' header__button button'
+              }
+            >
+              {t('Sign Up')}
+            </Button>
+          </div>
+        </header>
+      )}
+    </>
   );
 }
