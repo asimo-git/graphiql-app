@@ -36,31 +36,32 @@ export function parseUrlToFormData(url: string): RestFormData | null {
       .filter((segment) => segment);
     if (pathSegments.length < 2) return null;
 
-    const method = pathSegments[1];
     const endpoint = decodeURIComponent(atob(pathSegments[2]));
 
-    const restFormData: RestFormData = {
-      method: method,
-      endpoint: endpoint,
+    const dataFormUrl: RestFormData = {
+      method: pathSegments[1],
+      endpoint,
       headers: [],
     };
 
     if (pathSegments.length > 3) {
       const bodySegment = decodeURIComponent(atob(pathSegments[3]));
       try {
-        restFormData.jsonBody = JSON.parse(bodySegment);
+        JSON.parse(bodySegment);
+        dataFormUrl.jsonBody = bodySegment;
       } catch {
-        restFormData.textBody = bodySegment;
+        dataFormUrl.textBody = bodySegment;
       }
     }
 
     urlObj.searchParams.forEach((value, key) => {
-      restFormData.headers.push({
+      dataFormUrl.headers.push({
         key: key,
         value: value,
       });
     });
-    return restFormData;
+    console.log(dataFormUrl);
+    return dataFormUrl;
   } catch (error) {
     console.error('Parse URL error:', error);
     return null;
@@ -69,13 +70,15 @@ export function parseUrlToFormData(url: string): RestFormData | null {
 
 export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
   const baseUrl = window.location.origin;
+  const currentUrl = new URL(window.location.href);
   const pathSegments = window.location.pathname
     .split('/')
     .filter((segment) => segment.length > 0);
-  console.log('do', value);
+  console.log(pathSegments[0], Routes.RESTfull);
 
   if (!pathSegments[1]) {
-    const method = pathSegments[0] === Routes.RESTfull ? 'GET' : 'GRAPHQL';
+    const method =
+      '/' + pathSegments[0] === Routes.RESTfull ? 'GET' : 'GRAPHQL';
     pathSegments[1] = method;
   }
 
@@ -108,6 +111,10 @@ export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
       break;
   }
 
-  window.history.pushState({}, '', `${baseUrl}/${pathSegments.join('/')}`);
+  window.history.pushState(
+    {},
+    '',
+    `${baseUrl}/${pathSegments.join('/')}?${currentUrl.searchParams.toString()}`
+  );
   console.log('posle', window.location);
 }

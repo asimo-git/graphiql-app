@@ -1,7 +1,7 @@
 'use client';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { GraphQLFormData, ResponseData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
@@ -9,14 +9,25 @@ import styles from './GraphQLForm.module.scss';
 import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
 import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
+import { getDataFromLocalStorage, initialArray } from '@/app/utils/helpers';
+import { usePathname } from 'next/navigation';
+import { updateURL } from '@/app/utils/url-restfull';
+import { FIELD_NAMES } from '@/app/utils/constants';
 
 const GraphiQLForm = () => {
+  const pathname = usePathname();
+  const savedFormData: GraphQLFormData | null = useMemo(() => {
+    const data = getDataFromLocalStorage('currentFormData');
+    localStorage.removeItem('currentFormData');
+    return data;
+  }, []);
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<ResponseData | undefined>(
     undefined
   );
+  const [arrayUrl, setArrayUrl] = useState(initialArray());
 
   const {
     register,
@@ -38,6 +49,10 @@ const GraphiQLForm = () => {
     try {
       const response = await makeGraphQLApiRequest(data);
       setResponseData(response);
+      setArrayUrl([
+        ...arrayUrl,
+        { url: pathname, date: Date.now().toString() },
+      ]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -57,6 +72,10 @@ const GraphiQLForm = () => {
           variant="outlined"
           error={!!errors.endpoint}
           helperText={errors.endpoint ? 'Endpoint is required' : ''}
+          defaultValue={savedFormData?.endpoint || ''}
+          onBlur={(event) =>
+            updateURL(FIELD_NAMES.ENDPOINT, event.target.value)
+          }
         />
         <TextField
           {...register('sdlEndpoint')}

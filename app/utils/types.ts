@@ -31,15 +31,16 @@ export type KeyValueObj = {
 export type HistoryRequest = {
   url: string;
   date: string;
+  formData: RestFormData | GraphQLFormData;
 };
 
-export type HistoryURL = {
-  urlTo: string;
-  method: string;
-  encodedUrl: string;
-  body: string;
-  date: string;
-};
+// export type HistoryURL = {
+//   urlTo: string;
+//   method: string;
+//   encodedUrl: string;
+//   body: string;
+//   date: string;
+// };
 
 export type GraphQLFormData = {
   endpoint: string;

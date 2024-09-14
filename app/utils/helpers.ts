@@ -78,3 +78,11 @@ export function initialArray() {
     return saved ? JSON.parse(saved) : [];
   }
 }
+
+export function getDataFromLocalStorage(key: string) {
+  if (typeof window !== 'undefined') {
+    const stringData = localStorage.getItem(key);
+    if (stringData) return JSON.parse(stringData);
+  }
+  return null;
+}

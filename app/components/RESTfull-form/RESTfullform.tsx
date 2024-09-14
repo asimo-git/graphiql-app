@@ -16,25 +16,21 @@ import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
-import { initialArray } from '@/app/utils/helpers';
+import { getDataFromLocalStorage, initialArray } from '@/app/utils/helpers';
 import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
-import {
-  parseUrlToFormData,
-  updateURL,
-  // urlRESTfull,
-} from '@/app/utils/url-restfull';
-import { usePathname } from 'next/navigation';
+import { updateURL } from '@/app/utils/url-restfull';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Editor } from '@monaco-editor/react';
 
 const RESTfullForm = () => {
   const pathname = usePathname();
-  const savedFormData = useMemo(() => parseUrlToFormData(pathname), []);
-  // const getMainUrl = () => {
-  //   const parts = pathname.split('RESTfull');
-  //   return parts[0];
-  // };
-  // const mainUrl = `${getMainUrl()}\RESTfull`;
+  const searchParams = useSearchParams();
+  const savedFormData: RestFormData | null = useMemo(() => {
+    const data = getDataFromLocalStorage('currentFormData');
+    localStorage.removeItem('currentFormData');
+    return data;
+  }, []);
 
   const {
     register,
@@ -44,7 +40,12 @@ const RESTfullForm = () => {
     trigger,
     getValues,
     formState: { errors },
-  } = useForm<RestFormData>();
+  } = useForm<RestFormData>({
+    defaultValues: {
+      headers: savedFormData?.headers || [],
+      variables: savedFormData?.variables || [],
+    },
+  });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -69,8 +70,14 @@ const RESTfullForm = () => {
             <Editor
               height="300px"
               defaultLanguage="json"
+              defaultValue={savedFormData?.jsonBody || ''}
               value={field.value}
               onChange={(value) => field.onChange(value)}
+              onMount={(editor) => {
+                editor.onDidBlurEditorWidget(() =>
+                  updateURL(FIELD_NAMES.BODY, editor.getValue())
+                );
+              }}
             />
           )}
         />
@@ -78,10 +85,6 @@ const RESTfullForm = () => {
     ),
     [control]
   );
-
-  // const handleUpdateUrl = (newUrl: string) => {
-  //   window.history.pushState({}, '', newUrl);
-  // };
 
   useEffect(() => {
     localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
@@ -96,10 +99,16 @@ const RESTfullForm = () => {
     if (variables) {
       requestData = parseWithVariables(requestData, variables);
     }
-    console.log(pathname);
-    setArrayUrl([...arrayUrl, { url: pathname, date: Date.now().toString() }]);
 
-    // handleUpdateUrl(urlRESTfull(data, mainUrl));
+    setArrayUrl([
+      ...arrayUrl,
+      {
+        url: `${pathname}?${searchParams.toString()}`,
+        date: Date.now().toString(),
+        formData: data,
+      },
+    ]);
+
     const response = await makeApiRequest(requestData);
     setResponseData(response);
 
@@ -254,6 +263,7 @@ const RESTfullForm = () => {
               {...register('textBody')}
               id="outlined-basic"
               multiline
+              defaultValue={savedFormData?.textBody || ''}
               label="Body"
               variant="outlined"
               onBlur={(event) =>
