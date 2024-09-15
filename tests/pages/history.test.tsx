@@ -8,12 +8,6 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-// jest.mock('../../app/utils/Auth', () => ({
-//   useAuthenticated: () => ({
-//     user: { name: 'Test User' },
-//     isLoading: true,
-//   }),
-// }));
 jest.mock('../../app/utils/Auth', () => ({
   useAuthenticated: jest.fn(),
 }));

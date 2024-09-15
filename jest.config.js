@@ -4,7 +4,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
-  collectCoverageFrom: ['<rootDir>/app/**/*.{ts,tsx}'],
+  collectCoverageFrom: ['<rootDir>/app/**/*.{ts,tsx}', '!**/*.d.ts'],
   coverageReporters: ['text-summary', 'html'],
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/tests/**/*.(spec|test).[jt]s?(x)'],

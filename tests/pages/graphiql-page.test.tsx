@@ -1,6 +1,6 @@
+import GraphQLPage from '@/app/GraphiQL/graphiql-page';
 import { useAuthenticated } from '@/app/utils/Auth';
 import { render, screen } from '@testing-library/react';
-import RESTfullPage from '@/app/RESTfull/restfull-page';
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -12,21 +12,21 @@ jest.mock('../../app/utils/Auth', () => ({
   useAuthenticated: jest.fn(),
 }));
 
-jest.mock('../../app/components/RESTfull-form/RESTfullform', () => {
-  const MockRESTfullform = () => <div>RESTfullform</div>;
-  MockRESTfullform.displayName = 'MockRESTfullform';
-  return MockRESTfullform;
+jest.mock('../../app/components/GraphQLForm/GraphQLForm', () => {
+  const MockGraphiQLForm = () => <div>GraphiQLForm</div>;
+  MockGraphiQLForm.displayName = 'MockGraphiQLForm';
+  return MockGraphiQLForm;
 });
 
-describe('RESTfullPage', () => {
-  it('renders RESTfullPage if user is authenticated and not loading', () => {
+describe('GraphQLPage', () => {
+  it('renders GraphQLPage if user is authenticated and not loading', () => {
     (useAuthenticated as jest.Mock).mockImplementation(() => ({
       user: { name: 'Test User' },
       isLoading: true,
     }));
 
-    render(<RESTfullPage />);
-    expect(screen.getByText('RESTfullform')).toBeInTheDocument();
+    render(<GraphQLPage />);
+    expect(screen.getByText('GraphiQLForm')).toBeInTheDocument();
   });
 
   it('does nothing if data is still loading', () => {
@@ -35,7 +35,7 @@ describe('RESTfullPage', () => {
       isLoading: false,
     }));
 
-    const { container } = render(<RESTfullPage />);
+    const { container } = render(<GraphQLPage />);
     expect(container).toBeEmptyDOMElement();
   });
 
@@ -45,8 +45,8 @@ describe('RESTfullPage', () => {
       isLoading: false,
     }));
 
-    render(<RESTfullPage />);
+    render(<GraphQLPage />);
 
-    expect(screen.queryByText('RESTfullform')).not.toBeInTheDocument();
+    expect(screen.queryByText('GraphiQLForm')).not.toBeInTheDocument();
   });
 });
