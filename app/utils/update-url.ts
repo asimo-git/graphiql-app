@@ -9,7 +9,6 @@ export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
   const pathSegments = window.location.pathname
     .split('/')
     .filter((segment) => segment.length > 0);
-  console.log(pathSegments[0], Routes.RESTfull);
 
   if (!pathSegments[1]) {
     const method =
@@ -51,5 +50,4 @@ export function updateURL(fieldName: FieldName, value: string | KeyValueObj[]) {
     '',
     `${baseUrl}/${pathSegments.join('/')}?${currentUrl.searchParams.toString()}`
   );
-  console.log('posle', window.location);
 }

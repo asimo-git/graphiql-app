@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from '@mui/material';
+import Link from 'next/link';
 import Routes from '@/app/utils/routes';
 import styles from './Main.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -10,11 +10,11 @@ export default function MainWelcome() {
   const { t } = useTranslation();
   return (
     <main className={styles.main}>
-      <h1 className={styles.welcome}>Welcome!</h1>
-      <Link href={Routes.Authentication} underline="hover">
-        {t('Sign In')}
+      <h1 className={styles.welcome}>{t('Welcome')}!</h1>
+      <Link href={Routes.Authentication} className="link">
+        {t('Sign in')}
       </Link>
-      <Link href={Routes.Registration} underline="hover">
+      <Link href={Routes.Registration} className="link">
         {t('Sign Up')}
       </Link>
       <Info />
