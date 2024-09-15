@@ -30,7 +30,7 @@ describe('VariablesSection Component', () => {
   it('should render the component correctly', () => {
     renderWithFormProvider();
 
-    expect(screen.getByText('Variables:')).toBeInTheDocument();
+    expect(screen.getByText('Variables')).toBeInTheDocument();
     expect(screen.getByText('Add Variable')).toBeInTheDocument();
   });
 

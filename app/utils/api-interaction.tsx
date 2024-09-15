@@ -93,3 +93,20 @@ export async function makeGraphQLApiRequest({
     return handleError(error);
   }
 }
+
+export async function makeSDLRequest(
+  requestEndpoint: string,
+  sdlEndpoint?: string
+) {
+  try {
+    const sdlUrl = sdlEndpoint || requestEndpoint + '?sdl';
+    const response = await fetch(sdlUrl);
+    if (!response.ok) {
+      return '';
+    }
+    const sdlText = await response.text();
+    return sdlText;
+  } catch {
+    return '';
+  }
+}

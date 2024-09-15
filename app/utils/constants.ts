@@ -22,7 +22,7 @@ export const ERROR_MESSAGES: { [key: string]: string } = {
   'auth/wrong-password': 'Incorrect password. Please try again',
   'auth/user-not-found':
     'No account found with this email. Please register first',
-  default: 'unknown error, try again late',
+  default: 'Invalid data. Please check your credentials and try again.',
 };
 
 export const FIELD_NAMES = {
