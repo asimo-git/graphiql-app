@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import i18n from './../../utils/local';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { logout, auth } from '@/app/services/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthenticated } from '@/app/utils/Auth';
@@ -22,6 +22,29 @@ export default function Header() {
   const { user, isLoading } = useAuthenticated();
 
   const [buttonText, setButtonText] = useState('Sign in');
+
+  const [isSticky, setIsSticky] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (headerRef.current) {
+        if (window.scrollY > 150) {
+          setIsSticky(true);
+        }
+        if (window.scrollY === 0) {
+          setIsSticky(false);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const translationKey = user ? 'Sign out' : 'Sign in';
     setButtonText(translationKey);
@@ -45,45 +68,43 @@ export default function Header() {
     }
   };
   return (
-    <>
+<>
       {' '}
       {isLoading && (
-        <header className="header">
-          <div className="header__container box">
-            <div className="header__logo">
-              <Link href="./" />{' '}
-              <Image width={50} height={50} alt="logo" src={'/logo.jpg'} />
-              <span>{t('Soft')}</span>
-            </div>
-            <div className="header__switch">
-              {' '}
-              {checked ? 'EN' : 'RU'}
-              <Switch
-                checked={checked}
-                onChange={handleChange}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </div>
-            <Button
-              variant="contained"
-              className="header__button button"
-              onClick={handleClick}
-            >
-              {t(buttonText)}
-            </Button>
-            <Button
-              variant="contained"
-              href={Routes.Registration}
-              className={
-                user
-                  ? 'header__button button unvisible'
-                  : ' header__button button'
-              }
-            >
-              {t('Sign Up')}
-            </Button>
-          </div>
-        </header>
+    <header ref={headerRef} className={`${isSticky ? 'sticky' : 'header'}`}>
+      <div className="header__contain">
+        <div className="header__logo">
+          <Link href="./" />{' '}
+          <Image width={50} height={50} alt="logo" src={'/logo.png'} />
+          <span>{t('Soft')}</span>
+        </div>
+        <div className="header__switch">
+          {' '}
+          {checked ? 'EN' : 'RU'}
+          <Switch
+            checked={checked}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+        <Button
+          variant="contained"
+          className="header__button button"
+          onClick={handleClick}
+        >
+          {t(buttonText)}
+        </Button>
+        <Button
+          variant="contained"
+          href={Routes.Registration}
+          className={
+            user ? 'header__button button unvisible' : ' header__button button'
+          }
+        >
+          {t('Sign Up')}
+        </Button>
+      </div>
+    </header>
       )}
     </>
   );
