@@ -24,3 +24,10 @@ export const ERROR_MESSAGES: { [key: string]: string } = {
     'No account found with this email. Please register first',
   default: 'unknown error, try again late',
 };
+
+export const FIELD_NAMES = {
+  METHOD: 'method',
+  ENDPOINT: 'endpoint',
+  BODY: 'body',
+  HEADERS: 'headers',
+};

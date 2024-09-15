@@ -68,6 +68,9 @@ export default function Header() {
     }
   };
   return (
+<>
+      {' '}
+      {isLoading && (
     <header ref={headerRef} className={`${isSticky ? 'sticky' : 'header'}`}>
       <div className="header__contain">
         <div className="header__logo">
@@ -102,5 +105,7 @@ export default function Header() {
         </Button>
       </div>
     </header>
+      )}
+    </>
   );
 }
