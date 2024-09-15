@@ -148,7 +148,7 @@ const GraphiQLForm = () => {
               <Button
                 variant="contained"
                 onClick={() => remove(index)}
-                sx={{ width: '200px' }}
+                sx={{ width: '200px', marginTop: '16px' }}
               >
                 {t('Remove')}
               </Button>
