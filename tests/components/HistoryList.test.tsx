@@ -29,7 +29,7 @@ describe('HistoryList', () => {
     render(<HistoryList />);
     expect(
       screen.getByText(
-        "You haven't executed any requests. It's empty here. Try:"
+        "You haven't executed any requests. It's empty here. Try"
       )
     ).toBeInTheDocument();
     expect(screen.getByText('REST Client')).toBeInTheDocument();
