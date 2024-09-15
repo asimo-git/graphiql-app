@@ -70,10 +70,6 @@ export default function AuthenticationForm({
       router.push(Routes.Home);
     } catch (err) {
       if (err instanceof FirebaseError) {
-        // TODO - fix a bug
-        // there is a problem with authorization(!) error messages.
-        // instead of specific errors, the code auth/invalid-credential always comes
-        // registration errors are correct
         const message =
           ERROR_MESSAGES[err.code as keyof typeof ERROR_MESSAGES] ||
           ERROR_MESSAGES['default'];
