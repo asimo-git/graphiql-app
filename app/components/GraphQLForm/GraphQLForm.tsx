@@ -101,6 +101,7 @@ const GraphiQLForm = () => {
           <span>{t('Headers')}:</span>{' '}
           <Button
             variant="contained"
+            sx={{ width: '200px' }}
             onClick={() => append({ key: '', value: '' })}
           >
             {t('Add Header')}
@@ -147,7 +148,7 @@ const GraphiQLForm = () => {
               <Button
                 variant="contained"
                 onClick={() => remove(index)}
-                sx={{ width: '16%' }}
+                sx={{ width: '200px', marginTop: '16px' }}
               >
                 {t('Remove')}
               </Button>
@@ -155,7 +156,7 @@ const GraphiQLForm = () => {
           ))}
         </div>
 
-        <h2>{t('Query')}:</h2>
+        <h2 className={styles.graph__title}>{t('Query')}:</h2>
         <Controller
           name="query"
           control={control}
@@ -176,7 +177,7 @@ const GraphiQLForm = () => {
             </>
           )}
         />
-        <h2>{t('Variables')}:</h2>
+        <h2 className={styles.graph__title}>{t('Variables')}:</h2>
         <Controller
           name="variables"
           control={control}
@@ -191,6 +192,7 @@ const GraphiQLForm = () => {
         />
         <Button
           type="submit"
+          sx={{ width: '200px' }}
           variant="contained"
           className="rest__button button"
           disabled={isLoading}

@@ -160,7 +160,7 @@ const RESTfullForm = () => {
 
             <Button
               variant="contained"
-              sx={{ width: '16%' }}
+              sx={{ width: '200px' }}
               type="submit"
               onClick={() => {}}
             >
@@ -173,6 +173,7 @@ const RESTfullForm = () => {
           <span>{t('Headers')} </span>
           <Button
             variant="contained"
+            sx={{ width: '200px', marginLeft: '2%' }}
             onClick={() => append({ key: '', value: '' })}
           >
             {t('Add Header')}
@@ -222,7 +223,7 @@ const RESTfullForm = () => {
                   remove(index);
                   updateURL(FIELD_NAMES.HEADERS, fields);
                 }}
-                sx={{ width: '16%' }}
+                sx={{ width: '200px' }}
               >
                 {t('Remove')}
               </Button>
@@ -235,7 +236,7 @@ const RESTfullForm = () => {
         <div className="rest__item">
           <span>{t('Body')} </span>
           <Button
-            sx={{ margin: '2%', width: '16%' }}
+            sx={{ margin: '2%', width: '200px' }}
             variant="contained"
             onClick={() => {
               setchooseField(true);
@@ -244,7 +245,7 @@ const RESTfullForm = () => {
             JSON
           </Button>
           <Button
-            sx={{ margin: '2%', width: '16%' }}
+            sx={{ margin: '2%', width: '200px' }}
             variant="contained"
             onClick={() => {
               setchooseField(false);

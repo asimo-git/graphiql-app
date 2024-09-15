@@ -74,9 +74,10 @@ export default function Header() {
         <header ref={headerRef} className={`${isSticky ? 'sticky' : 'header'}`}>
           <div className="header__contain">
             <div className="header__logo">
-              <Link href="./" />{' '}
-              <Image width={50} height={50} alt="logo" src={'/logo.png'} />
-              <span>{t('Soft')}</span>
+              <Link href="/">
+                <Image width={50} height={50} alt="logo" src={'/logo.png'} />
+                <span>{t('Soft')}</span>
+              </Link>
             </div>
             <div className="header__switch">
               {' '}

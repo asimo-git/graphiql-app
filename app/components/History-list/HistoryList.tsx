@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import Routers from '../../utils/routes';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 const HistoryList = () => {
   const [isEmpty, setIsEmpty] = useState(true);
@@ -28,19 +29,20 @@ const HistoryList = () => {
   const handleClick = (formData: RestFormData | GraphQLFormData) => {
     localStorage.setItem('currentFormData', JSON.stringify(formData));
   };
+  const { t } = useTranslation();
 
   return (
     <div className="history__container">
       {isEmpty ? (
         <>
           <h1 className="history__title">
-            You haven&#39;t executed any requests. It&#39;s empty here. Try:
+            {t(`You haven't executed any requests. It's empty here. Try`)}
           </h1>
-          <Link href={Routers.RESTfull} className="history__link">
-            REST Client
+          <Link href={Routers.RESTfull} className="link">
+            {t('REST Client')}
           </Link>
-          <Link href={Routers.GraphiQL} className="history__link">
-            GraphiQL Client
+          <Link href={Routers.GraphiQL} className="link">
+            {t('GraphiQL Client')}
           </Link>
         </>
       ) : (
@@ -57,7 +59,7 @@ const HistoryList = () => {
                 <Link
                   href={request.url}
                   onClick={() => handleClick(request.formData)}
-                  className="history__link"
+                  className="link"
                 >
                   {request.formData.endpoint}
                 </Link>
