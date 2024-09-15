@@ -1,7 +1,7 @@
 'use client';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { GraphQLFormData, ResponseData } from '@/app/utils/types';
 import ResponseSection from '../response-section/ResponseSection';
@@ -9,23 +9,42 @@ import styles from './GraphQLForm.module.scss';
 import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
 import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
+import { getAndRemoveDataFromLS, initialArray } from '@/app/utils/helpers';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { updateURL } from '@/app/utils/update-url';
+import { FIELD_NAMES } from '@/app/utils/constants';
 
 const GraphiQLForm = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const savedFormData: GraphQLFormData | null = useMemo(() => {
+    return getAndRemoveDataFromLS('currentFormData');
+  }, []);
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<ResponseData | undefined>(
     undefined
   );
+  const [arrayUrl, setArrayUrl] = useState(initialArray());
+
+  useEffect(() => {
+    localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
+  }, [arrayUrl]);
 
   const {
     register,
-    control,
     handleSubmit,
+    control,
+    setValue,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<GraphQLFormData>({
     defaultValues: {
-      query: 'query {}',
+      headers: savedFormData?.headers || [],
+      query: savedFormData?.query || 'query {}',
+      variables: savedFormData?.variables || '',
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -38,6 +57,14 @@ const GraphiQLForm = () => {
     try {
       const response = await makeGraphQLApiRequest(data);
       setResponseData(response);
+      setArrayUrl([
+        ...arrayUrl,
+        {
+          url: `${pathname}?${searchParams.toString()}`,
+          date: Date.now().toString(),
+          formData: data,
+        },
+      ]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -57,11 +84,16 @@ const GraphiQLForm = () => {
           variant="outlined"
           error={!!errors.endpoint}
           helperText={errors.endpoint ? 'Endpoint is required' : ''}
+          defaultValue={savedFormData?.endpoint || ''}
+          onBlur={(event) =>
+            updateURL(FIELD_NAMES.ENDPOINT, event.target.value)
+          }
         />
         <TextField
           {...register('sdlEndpoint')}
           sx={{ width: '80%', marginTop: '1rem' }}
           id="outlined-basic"
+          defaultValue={savedFormData?.sdlEndpoint || ''}
           label="SDL URL"
           variant="outlined"
         />
@@ -87,6 +119,13 @@ const GraphiQLForm = () => {
                 helperText={
                   errors.headers?.[index]?.key ? 'Key is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.key`, event.target.value);
+                  trigger(`headers.${index}.key`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <TextField
                 {...register(`headers.${index}.value`)}
@@ -97,6 +136,13 @@ const GraphiQLForm = () => {
                 helperText={
                   errors.headers?.[index]?.value ? 'Value is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.value`, event.target.value);
+                  trigger(`headers.${index}.value`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <Button
                 variant="contained"

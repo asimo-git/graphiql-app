@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,26 +10,40 @@ import { Button } from '@mui/material';
 import './RESTfull.scss';
 import 'react-json-view-lite/dist/index.css';
 import { useState } from 'react';
-import { METHODS } from '@/app/utils/constants';
+import { FIELD_NAMES, METHODS } from '@/app/utils/constants';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ResponseData, RestFormData } from '@/app/utils/types';
 import { makeApiRequest } from '@/app/utils/api-interaction';
 import ResponseSection from '../response-section/ResponseSection';
 import VariablesSection from '../variables-section/VariablesSection';
+import { getAndRemoveDataFromLS, initialArray } from '@/app/utils/helpers';
 import { parseWithVariables } from '@/app/utils/helpers';
 import { useTranslation } from 'react-i18next';
-import { urlRESTfull } from '@/app/utils/url-restfull';
-import { usePathname } from 'next/navigation';
+import { updateURL } from '@/app/utils/update-url';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Editor } from '@monaco-editor/react';
 
 const RESTfullForm = () => {
-  const mainUrl = usePathname();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const savedFormData: RestFormData | null = useMemo(() => {
+    return getAndRemoveDataFromLS('currentFormData');
+  }, []);
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    trigger,
+    getValues,
     formState: { errors },
-  } = useForm<RestFormData>();
+  } = useForm<RestFormData>({
+    defaultValues: {
+      headers: savedFormData?.headers || [],
+      variables: savedFormData?.variables || [],
+    },
+  });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -42,6 +56,8 @@ const RESTfullForm = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [arrayUrl, setArrayUrl] = useState(initialArray());
+
   const jsonEditorElement = useMemo(
     () => (
       <div className="body__editor json__editor">
@@ -52,8 +68,14 @@ const RESTfullForm = () => {
             <Editor
               height="300px"
               defaultLanguage="json"
+              defaultValue={savedFormData?.jsonBody || ''}
               value={field.value}
               onChange={(value) => field.onChange(value)}
+              onMount={(editor) => {
+                editor.onDidBlurEditorWidget(() =>
+                  updateURL(FIELD_NAMES.BODY, editor.getValue())
+                );
+              }}
             />
           )}
         />
@@ -62,9 +84,9 @@ const RESTfullForm = () => {
     [control]
   );
 
-  const handleUpdateUrl = (newUrl: string) => {
-    window.history.pushState({}, '', newUrl);
-  };
+  useEffect(() => {
+    localStorage.setItem('arrayRequests', JSON.stringify(arrayUrl));
+  }, [arrayUrl]);
 
   const onSubmit = async (data: RestFormData) => {
     setIsLoading(true);
@@ -76,7 +98,14 @@ const RESTfullForm = () => {
       requestData = parseWithVariables(requestData, variables);
     }
 
-    handleUpdateUrl(urlRESTfull(data, mainUrl));
+    setArrayUrl([
+      ...arrayUrl,
+      {
+        url: `${pathname}?${searchParams.toString()}`,
+        date: Date.now().toString(),
+        formData: data,
+      },
+    ]);
 
     const response = await makeApiRequest(requestData);
     setResponseData(response);
@@ -100,7 +129,10 @@ const RESTfullForm = () => {
                 {...register('method')}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                defaultValue={METHODS.GET}
+                defaultValue={savedFormData?.method || METHODS.GET}
+                onChange={(event) => {
+                  updateURL(FIELD_NAMES.METHOD, event.target.value);
+                }}
                 label="Method"
               >
                 <MenuItem value={METHODS.GET}>GET</MenuItem>
@@ -118,8 +150,12 @@ const RESTfullForm = () => {
               id="outlined-basic"
               label={t('Endpoint URL')}
               variant="outlined"
+              defaultValue={savedFormData?.endpoint || ''}
               error={!!errors.endpoint}
               helperText={errors.endpoint ? 'Endpoint is required' : ''}
+              onBlur={(event) =>
+                updateURL(FIELD_NAMES.ENDPOINT, event.target.value)
+              }
             />
 
             <Button
@@ -155,6 +191,13 @@ const RESTfullForm = () => {
                 helperText={
                   errors.headers?.[index]?.key ? 'Key is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.key`, event.target.value);
+                  trigger(`headers.${index}.key`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <TextField
                 {...register(`headers.${index}.value`)}
@@ -165,10 +208,20 @@ const RESTfullForm = () => {
                 helperText={
                   errors.headers?.[index]?.value ? 'Value is required' : ''
                 }
+                onBlur={(event) => {
+                  setValue(`headers.${index}.value`, event.target.value);
+                  trigger(`headers.${index}.value`).then((valid) => {
+                    const updatedFields = getValues('headers');
+                    if (valid) updateURL(FIELD_NAMES.HEADERS, updatedFields);
+                  });
+                }}
               />
               <Button
                 variant="contained"
-                onClick={() => remove(index)}
+                onClick={() => {
+                  remove(index);
+                  updateURL(FIELD_NAMES.HEADERS, fields);
+                }}
                 sx={{ width: '16%' }}
               >
                 {t('Remove')}
@@ -208,8 +261,12 @@ const RESTfullForm = () => {
               {...register('textBody')}
               id="outlined-basic"
               multiline
+              defaultValue={savedFormData?.textBody || ''}
               label="Body"
               variant="outlined"
+              onBlur={(event) =>
+                updateURL(FIELD_NAMES.BODY, event.target.value)
+              }
             />
           )}
         </div>
