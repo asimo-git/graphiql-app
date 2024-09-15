@@ -8,7 +8,10 @@ import ResponseSection from '../response-section/ResponseSection';
 import styles from './GraphQLForm.module.scss';
 import { Editor } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
-import { makeGraphQLApiRequest } from '@/app/utils/api-interaction';
+import {
+  makeGraphQLApiRequest,
+  makeSDLRequest,
+} from '@/app/utils/api-interaction';
 import { getAndRemoveDataFromLS, initialArray } from '@/app/utils/helpers';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { updateURL } from '@/app/utils/update-url';
@@ -16,6 +19,7 @@ import { FIELD_NAMES } from '@/app/utils/constants';
 
 const GraphiQLForm = () => {
   const pathname = usePathname();
+  const [sdlDocumentation, setSdlDocumentation] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const savedFormData: GraphQLFormData | null = useMemo(() => {
     return getAndRemoveDataFromLS('currentFormData');
@@ -65,6 +69,8 @@ const GraphiQLForm = () => {
           formData: data,
         },
       ]);
+      const sdlResponse = await makeSDLRequest(data.endpoint, data.sdlEndpoint);
+      setSdlDocumentation(sdlResponse);
     } catch (error) {
       console.error(error);
     } finally {
@@ -201,6 +207,12 @@ const GraphiQLForm = () => {
         </Button>
       </form>
       <ResponseSection isLoading={isLoading} responseData={responseData} />
+      {sdlDocumentation && (
+        <>
+          <h2>Documentation:</h2>
+          <div>{sdlDocumentation}</div>
+        </>
+      )}
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Header from '../../app/components/header/Header';
 import '@testing-library/jest-dom';
 import { logout } from '../../app/services/firebase';
-// import Routes from '../../app/utils/routes';
 
 jest.mock('../../app/services/firebase', () => ({
   logout: jest.fn(),
@@ -70,33 +69,4 @@ describe('Header component', () => {
     fireEvent.click(buttonElement);
     expect(logout).toHaveBeenCalled();
   });
-
-  // it('should navigate to authentication page when sign-in button is clicked', () => {
-  //   // Assuming useAuthenticated returns user as null for this test
-  //   jest.mock('../../app/utils/Auth', () => ({
-  //     useAuthenticated: () => ({
-  //       user: null,
-  //       isLoading: false,
-  //     }),
-  //   }));
-
-  //   render(<Header />);
-  //   const buttonElement = screen.getByRole('button', { name: /Sign in/i });
-  //   fireEvent.click(buttonElement);
-  //   const useRouter = jest.requireMock('next/navigation').useRouter();
-  //   expect(useRouter.push).toHaveBeenCalledWith(Routes.Authentication);
-  // });
-
-  // it('should render sign-up button when user is not authenticated', () => {
-  //   jest.mock('../../app/utils/Auth', () => ({
-  //     useAuthenticated: () => ({
-  //       user: null,
-  //       isLoading: true,
-  //     }),
-  //   }));
-
-  //   render(<Header />);
-  //   const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
-  //   expect(signUpButton).toBeVisible();
-  // });
 });
