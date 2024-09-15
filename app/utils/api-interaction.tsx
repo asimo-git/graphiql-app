@@ -100,7 +100,6 @@ export async function makeSDLRequest(
 ) {
   try {
     const sdlUrl = sdlEndpoint || requestEndpoint + '?sdl';
-    console.log(sdlUrl);
     const response = await fetch(sdlUrl);
     if (!response.ok) {
       return '';
