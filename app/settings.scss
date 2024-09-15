@@ -10,7 +10,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
 body {
 	font-size: $base-font-size;
 	color: $text-color;
-	background-color: $secondary-color;
+	background-color: $back-color;
 	margin: 0;
 	display: flex;
 	flex-direction: column;
@@ -32,4 +32,36 @@ body {
 
 main {
 	flex: 1;
+}
+
+.link {
+	color: $first-color;
+	text-decoration: none;
+	position: relative;
+	transition: color 0.3s ease, text-decoration 0.3s ease;
+	margin-right: 16px;
+	font-weight: 700;
+
+	&::after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 2px;
+		left: 0;
+		bottom: -2px;
+		background-color: lightblue;
+		transition: width 0.3s ease;
+	}
+
+	&:hover {
+		color: lightblue;
+
+		&::after {
+			width: 100%;
+		}
+	}
+}
+
+.title {
+	color: $first-color
 }
