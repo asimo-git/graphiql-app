@@ -32,10 +32,6 @@ describe('RESTfullForm Component', () => {
 
   it('should handle form submission and displays response section', async () => {
     render(<RESTfullForm />);
-
-    // fireEvent.mouseDown(screen.getByLabelText('Method'));
-    // const postOption = screen.getByRole('option', { name: 'POST' });
-    // fireEvent.click(postOption);
     const endpointInput = screen.getByLabelText('Endpoint URL');
     fireEvent.change(endpointInput, {
       target: { value: 'https://test.com/data' },
