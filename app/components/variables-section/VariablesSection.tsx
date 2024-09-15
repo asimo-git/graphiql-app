@@ -24,6 +24,7 @@ const VariablesSection = ({
         <span>{t('Variables')}</span>
         <Button
           variant="contained"
+          sx={{ width: '200px', marginLeft: '2%' }}
           onClick={() => append({ key: '', value: '' })}
         >
           {t('Add Variable')}

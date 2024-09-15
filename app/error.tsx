@@ -11,11 +11,13 @@ export default function Error({
 }) {
   const { t } = useTranslation();
   return (
-    <main>
-      <h2>{t('Something went wrong!')}</h2>
-      <Button variant="contained" onClick={reset}>
-        {t('Try again')}
-      </Button>
+    <main className="main">
+      <div className="main__container">
+        <h2 className="title">{t('Something went wrong!')}</h2>
+        <Button variant="contained" onClick={reset}>
+          {t('Try again')}
+        </Button>
+      </div>
     </main>
   );
 }

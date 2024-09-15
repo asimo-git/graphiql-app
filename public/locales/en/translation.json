@@ -2,7 +2,7 @@
   "Софт": "Soft",
   "Войти": "Sign in",
   "Выйти": "Sign out",
-  "Добро пожаловать!": "Welcome!",
+  "Добро пожаловать": "Welcome",
   "Регистрация": "Sign Up",
   "С возвращением!": "Welcome Back",
   "Заголовки": "Headers",
@@ -54,5 +54,7 @@
   "Это приложение представляет собой облегченную версию Postman и GraphQL, объединенных в одно приложение. Postman — многофункциональная платформа для использования (и создания) API. GraphiQL — это игровая площадка/IDE для запросов graphQL. Дополнительные части: Возможности авторизации и аутентификации, гарантирующие, что доступ к инструменту будет ограничен авторизованными пользователями. Раздел истории, который перенаправит пользователя в определенный раздел для ранее выполненных запросов».": "This app is a lightweight version of Postman and GraphQL, combined into one app. Postman is a feature-rich platform for consuming (and creating) APIs. GraphiQL is a playground/IDE for graphQL queries. Extra parts: Authorization and authentication capabilities to ensure that access to the tool is limited to authorized users. History section that will redirect the user to a specific section for previously executed queries.",
   "О курсе": "About course",
   "О проекте": "About project",
-  "Разработчики": "Developers"
+  "Разработчики": "Developers",
+  "История": "History",
+  "Вы не выполнили ни одного запроса. Здесь пусто. Попробуйте": "You haven't executed any requests. It's empty here. Try"
 }
